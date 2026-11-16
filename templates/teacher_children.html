@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Children - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+                <a href="/">EduMentor</a>
+                <p>Teacher Portal</p>
+            </div>
+
+            <nav class="parent-menu">
+                <a href="/teacher/dashboard">
+                    <span>&#127968;</span> Dashboard
+                </a>
+                <a href="/teacher/children" class="active">
+                    <span>&#128103;</span> Assigned Children
+                </a>
+                <a href="/teacher/observation">
+                    <span>&#128221;</span> Record Observation
+                </a>
+                <a href="/teacher/observations">
+                    <span>&#128203;</span> My Observations
+                </a>
+                <a href="/teacher/recommend">
+                    <span>&#127979;</span> Recommend Schools
+                </a>
+                <a href="/teacher/recommendations">
+                    <span>&#9989;</span> My Recommendations
+                </a>
+            </nav>
+
+            <div class="parent-logout">
+                <a href="/logout">
+                    <span>&#128682;</span> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+            <header class="parent-topbar">
+                <div>
+                    <p class="dashboard-label">ASSIGNED CHILDREN</p>
+                    <h1>Assigned Children</h1>
+                </div>
+                <div class="parent-user">
+                    <div class="parent-avatar">&#128105;&#8205;&#127979;</div>
+                    <div>
+                        <strong>Teacher</strong>
+                        <small>{{ teacher.name }}</small>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for cat, msg in messages %}
+                            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 CHILDREN TABLE
+                 ================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+                    <div>
+                        <span>CHILDREN LIST</span>
+                        <h2>Children Under Your Care</h2>
+                    </div>
+                </div>
+
+                {% if children %}
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+                            <thead>
+                                <tr style="background:#6c5ce7;color:#fff;text-align:left;">
+                                    <th style="padding:14px 18px;">Child Name</th>
+                                    <th style="padding:14px 18px;">Gender</th>
+                                    <th style="padding:14px 18px;">Current Class</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for child in children %}
+                                    <tr style="border-bottom:1px solid #f0f0f0;">
+                                        <td style="padding:14px 18px;font-weight:600;">{{ child.child_name }}</td>
+                                        <td style="padding:14px 18px;">{{ child.gender | capitalize }}</td>
+                                        <td style="padding:14px 18px;">{{ child.current_class | upper }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="child-note">
+                        <span>&#128161;</span>
+                        <div>
+                            <strong>No Children Assigned</strong>
+                            <p>You have no children assigned to your profile yet. Use the form below to assign one.</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================
+                 ASSIGN CHILD FORM
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+                    <div class="child-heading-icon">&#128103;</div>
+                    <div>
+                        <h2>Assign a Child</h2>
+                        <p>Select a child from the list below to assign them to your profile.</p>
+                    </div>
+                </div>
+
+                <form action="/teacher/assign" method="POST" class="child-form">
+
+                    <div class="child-form-group">
+                        <label for="child_id">Select Child</label>
+                        <select id="child_id" name="child_id" required>
+                            <option value="">-- Select a Child --</option>
+                            {% for child in all_children %}
+                                <option value="{{ child.id }}">{{ child.child_name }} ({{ child.gender | capitalize }}, {{ child.current_class | upper }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="child-form-buttons">
+                        <a href="/teacher/dashboard" class="child-cancel-btn">Cancel</a>
+                        <button type="submit" class="child-save-btn">Assign Child &rarr;</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+                <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

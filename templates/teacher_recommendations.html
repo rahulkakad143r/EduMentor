@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Recommendations - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+                <a href="/">EduMentor</a>
+                <p>Teacher Portal</p>
+            </div>
+
+            <nav class="parent-menu">
+                <a href="/teacher/dashboard">
+                    <span>&#127968;</span> Dashboard
+                </a>
+                <a href="/teacher/children">
+                    <span>&#128103;</span> Assigned Children
+                </a>
+                <a href="/teacher/observation">
+                    <span>&#128221;</span> Record Observation
+                </a>
+                <a href="/teacher/observations">
+                    <span>&#128203;</span> My Observations
+                </a>
+                <a href="/teacher/recommend">
+                    <span>&#127979;</span> Recommend Schools
+                </a>
+                <a href="/teacher/recommendations" class="active">
+                    <span>&#9989;</span> My Recommendations
+                </a>
+            </nav>
+
+            <div class="parent-logout">
+                <a href="/logout">
+                    <span>&#128682;</span> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <main class="parent-main">
+
+            <header class="parent-topbar">
+                <div>
+                    <p class="dashboard-label">MY RECOMMENDATIONS</p>
+                    <h1>School Recommendations You Made</h1>
+                </div>
+                <div class="parent-user">
+                    <div class="parent-avatar">&#128105;&#8205;&#127979;</div>
+                    <div>
+                        <strong>Teacher</strong>
+                        <small>{{ teacher.name }}</small>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for cat, msg in messages %}
+                            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+                    <div>
+                        <span>RECOMMENDATION LOG</span>
+                        <h2>Schools Recommended to Children</h2>
+                    </div>
+                </div>
+
+                {% if recommendations %}
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+                            <thead>
+                                <tr style="background:#6c5ce7;color:#fff;text-align:left;">
+                                    <th style="padding:14px 18px;">Child</th>
+                                    <th style="padding:14px 18px;">School</th>
+                                    <th style="padding:14px 18px;">Location</th>
+                                    <th style="padding:14px 18px;">Syllabus</th>
+                                    <th style="padding:14px 18px;">Note</th>
+                                    <th style="padding:14px 18px;">Date</th>
+                                    <th style="padding:14px 18px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rec in recommendations %}
+                                    <tr style="border-bottom:1px solid #f0f0f0;">
+                                        <td style="padding:14px 18px;font-weight:600;">{{ rec.child_name }}</td>
+                                        <td style="padding:14px 18px;">{{ rec.school_name }}</td>
+                                        <td style="padding:14px 18px;">{{ rec.location }}</td>
+                                        <td style="padding:14px 18px;">{{ rec.syllabus }}</td>
+                                        <td style="padding:14px 18px;">{{ rec.note if rec.note else '—' }}</td>
+                                        <td style="padding:14px 18px;">{{ rec.rec_date }}</td>
+                                        <td style="padding:14px 18px;">
+                                            <form action="/teacher/recommendations/delete" method="POST"
+                                                  onsubmit="return confirm('Remove this recommendation?');">
+                                                <input type="hidden" name="recommendation_id" value="{{ rec.id }}">
+                                                <button type="submit"
+                                                        style="background:#ff7675;color:#fff;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;">
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="child-note">
+                        <span>&#128161;</span>
+                        <div>
+                            <strong>No Recommendations Yet</strong>
+                            <p>You have not recommended any schools yet. Go to Recommend Schools to get started.</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </section>
+
+            <section class="dashboard-section">
+                <div class="quick-actions">
+                    <a href="/teacher/recommend" class="quick-action">
+                        <div class="quick-icon">&#127979;</div>
+                        <div>
+                            <h3>Recommend Schools</h3>
+                            <p>Recommend suitable schools for an assigned child.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </a>
+                </div>
+            </section>
+
+            <footer class="parent-footer">
+                <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

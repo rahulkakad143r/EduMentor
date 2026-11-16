@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>School Profile - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         SCHOOL PROFILE
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    School Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/school/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/school/profile"
+                   class="active">
+
+                    <span>📝</span>
+                    School Profile
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        SCHOOL PROFILE
+                    </p>
+
+                    <h1>
+                        School Details
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#127979;</div>
+
+                    <div>
+
+                        <strong>
+                            School
+                        </strong>
+
+                        <small>
+                            {{ school.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 SCHOOL PROFILE FORM
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        🏫
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            School Information
+                        </h2>
+
+                        <p>
+                            Update your school details to stay
+                            visible in recommendations.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form action="/school/profile"
+                      method="POST"
+                      class="child-form">
+
+
+                    <!-- School Name -->
+
+                    <div class="child-form-group">
+
+                        <label for="name">
+                            School Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter school name"
+                            value="{{ school.name }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Syllabus -->
+
+                    <div class="child-form-group">
+
+                        <label for="syllabus">
+                            Syllabus
+                        </label>
+
+                        <input
+                            type="text"
+                            id="syllabus"
+                            name="syllabus"
+                            placeholder="Enter syllabus (e.g. CBSE, State Board)"
+                            value="{{ school.syllabus }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Classes -->
+
+                    <div class="child-form-group">
+
+                        <label for="classes">
+                            Classes Offered
+                        </label>
+
+                        <input
+                            type="text"
+                            id="classes"
+                            name="classes"
+                            placeholder="Enter classes offered"
+                            value="{{ school.classes }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Fees -->
+
+                    <div class="child-form-group">
+
+                        <label for="fees">
+                            Annual Fees
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fees"
+                            name="fees"
+                            placeholder="Enter annual fees"
+                            value="{{ school.fees }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Facilities -->
+
+                    <div class="child-form-group full-width">
+
+                        <label for="facilities">
+                            Facilities
+                        </label>
+
+                        <textarea
+                            id="facilities"
+                            name="facilities"
+                            rows="4"
+                            placeholder="Enter facilities offered by the school"
+                        >{{ school.facilities }}</textarea>
+
+                    </div>
+
+
+                    <!-- Methodology -->
+
+                    <div class="child-form-group">
+
+                        <label for="methodology">
+                            Teaching Methodology
+                        </label>
+
+                        <input
+                            type="text"
+                            id="methodology"
+                            name="methodology"
+                            placeholder="Enter teaching methodology"
+                            value="{{ school.methodology }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Contact -->
+
+                    <div class="child-form-group">
+
+                        <label for="contact">
+                            Contact Information
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contact"
+                            name="contact"
+                            placeholder="Enter contact information"
+                            value="{{ school.contact }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- =================================
+                         LOGIN CREDENTIALS
+                         ================================= -->
+
+                    {% if not school.username %}
+
+                        <div class="child-form-group full-width">
+
+                            <h3 class="child-form-subheading">
+                                Set Login Credentials
+                            </h3>
+
+                            <p class="child-form-note">
+                                Create a username, email and password to
+                                log into the School Portal.
+                            </p>
+
+                        </div>
+
+
+                        <!-- Username -->
+
+                        <div class="child-form-group">
+
+                            <label for="username">
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Choose a login username"
+                                value="{{ school.username }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="child-form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter login email"
+                                value="{{ school.email }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Phone -->
+
+                        <div class="child-form-group">
+
+                            <label for="phone">
+                                Mobile Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="10-digit mobile number"
+                                maxlength="10"
+                                pattern="[0-9]{10}"
+                                value="{{ school.phone }}"
+                            >
+
+                        </div>
+
+
+                        <!-- New Password -->
+
+                        <div class="child-form-group">
+
+                            <label for="new_password">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="new_password"
+                                name="new_password"
+                                placeholder="Create a password"
+                                minlength="6"
+                                required
+                            >
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="child-form-group full-width">
+
+                            <h3 class="child-form-subheading">
+                                Login Credentials
+                            </h3>
+
+                            <p class="child-form-note">
+                                Your login username is
+                                <strong>{{ school.username }}</strong>.
+                                To change your email or password, please
+                                contact the EduMentor administrator.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- Buttons -->
+
+                    <div class="child-form-buttons">
+
+                        <a href="/school/dashboard"
+                           class="child-cancel-btn">
+
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="child-save-btn"
+                        >
+
+                            Save Profile
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

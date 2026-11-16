@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>All Teachers - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         ALL TEACHERS
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/teachers"
+                   class="active">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        MANAGE TEACHERS
+                    </p>
+
+                    <h1>
+                        All Teachers
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 ADD TEACHER FORM
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        ➕
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Add New Teacher
+                        </h2>
+
+                        <p>
+                            Create a teacher account directly from
+                            the admin panel.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form action="/admin/teachers"
+                      method="POST"
+                      class="child-form">
+
+
+                    <div class="child-form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Choose a username"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter email address"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="phone">
+                            Mobile Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="10-digit mobile number"
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="city">
+                            City / Area
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            placeholder="Enter city"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="qualification">
+                            Qualification
+                        </label>
+
+                        <input
+                            type="text"
+                            id="qualification"
+                            name="qualification"
+                            placeholder="e.g. B.Ed, M.A."
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="experience">
+                            Experience
+                        </label>
+
+                        <input
+                            type="text"
+                            id="experience"
+                            name="experience"
+                            placeholder="e.g. 5 years"
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-buttons">
+
+                        <button
+                            type="submit"
+                            class="child-save-btn"
+                        >
+
+                            Add Teacher
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================
+                 TEACHERS TABLE
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👨‍🏫
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Registered Teachers
+                        </h2>
+
+                        <p>
+                            View all teachers registered on EduMentor.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if teachers %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>City</th>
+                                    <th>Qualification</th>
+                                    <th>Experience</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for teacher in teachers %}
+
+                                    <tr>
+
+                                        <td>
+                                            <a href="/admin/teacher/{{ teacher.id }}"
+                                               class="admin-detail-link">
+                                                {{ teacher.name }}
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.username }}
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.email }}
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.phone }}
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.city }}
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.qualification }}
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.experience }}
+                                        </td>
+
+                                        <td>
+                                            {{ teacher.joined }}
+                                        </td>
+
+                                        <td>
+                                            <details class="admin-actions">
+                                                <summary
+                                                    class="admin-actions-toggle">
+                                                    🔑 Reset Login
+                                                </summary>
+
+                                                <form
+                                                    action="/admin/teachers"
+                                                    method="POST"
+                                                    class="admin-actions-form">
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="action"
+                                                        value="reset">
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="teacher_id"
+                                                        value="{{ teacher.id }}">
+
+                                                    <label for="u-teacher-{{ teacher.id }}">
+                                                        Username
+                                                    </label>
+
+                                                    <input
+                                                        type="text"
+                                                        id="u-teacher-{{ teacher.id }}"
+                                                        name="username"
+                                                        value="{{ teacher.username }}"
+                                                        required
+                                                    >
+
+                                                    <label for="e-teacher-{{ teacher.id }}">
+                                                        Email
+                                                    </label>
+
+                                                    <input
+                                                        type="email"
+                                                        id="e-teacher-{{ teacher.id }}"
+                                                        name="email"
+                                                        value="{{ teacher.email }}"
+                                                        required
+                                                    >
+
+                                                    <label for="p-teacher-{{ teacher.id }}">
+                                                        New Password
+                                                    </label>
+
+                                                    <input
+                                                        type="password"
+                                                        id="p-teacher-{{ teacher.id }}"
+                                                        name="password"
+                                                        placeholder="New password"
+                                                        minlength="6"
+                                                        required
+                                                    >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="action-btn"
+                                                    >
+                                                        Save Credentials
+                                                    </button>
+
+                                                </form>
+
+                                            </details>
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No teachers registered yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

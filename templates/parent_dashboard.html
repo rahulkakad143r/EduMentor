@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Parent Dashboard - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================
+         PARENT DASHBOARD
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard"
+                   class="active">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/parent/child">
+
+                    <span>👧</span>
+                    Child Details
+
+                </a>
+
+
+                <a href="/parent/assessment">
+
+                    <span>📝</span>
+                    Assessment
+
+                </a>
+
+
+                <a href="/parent/results">
+
+                    <span>📊</span>
+                    Results
+
+                </a>
+
+
+                <a href="/parent/certificate">
+
+                    <span>🏅</span>
+                    Certificate
+
+                </a>
+
+
+                <a href="/parent/observations">
+
+                    <span>👩‍🏫</span>
+                    Teacher Observations
+
+                </a>
+
+
+                <a href="/parent/recommendations">
+
+                    <span>🏫</span>
+                    School Recommendations
+
+                </a>
+
+
+                <a href="/parent/admissions">
+
+                    <span>📋</span>
+                    Admissions
+
+                </a>
+
+
+                <a href="/parent/profile">
+
+                    <span>👤</span>
+                    My Profile
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/login">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        PARENT DASHBOARD
+                    </p>
+
+                    <h1>
+                        Welcome to EduMentor 👋
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            EduMentor User
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 WELCOME CARD
+                 ================================= -->
+
+            <section class="dashboard-welcome">
+
+                <div>
+
+                    <span>
+                        Welcome Back{% if stats.has_child %}, {{ stats.child_name }}!{% else %}!{% endif %}
+                    </span>
+
+                    <h2>
+                        {% if stats.has_child %}
+                            Let's continue finding the right
+                            school for your child.
+                        {% else %}
+                            Let's find the right school
+                            for your child.
+                        {% endif %}
+                    </h2>
+
+                    <p>
+                        {% if stats.has_child %}
+                            Your child's profile is set up. Complete
+                            the assessment to receive personalized
+                            school recommendations.
+                        {% else %}
+                            Complete your child's profile and
+                            assessment to receive personalized
+                            school recommendations.
+                        {% endif %}
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-icon">
+                    🎓
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 SUMMARY CARDS
+                 ================================= -->
+
+            <section class="dashboard-cards">
+
+
+                <!-- Child -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        👧
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Child Profile
+                        </p>
+
+                        <h3>
+                            {{ "Added" if stats.has_child else "Not Added" }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Assessment -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📝
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Assessment
+                        </p>
+
+                        <h3>
+                            {{ stats.assessment_status }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Results -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Assessment Result
+                        </p>
+
+                        <h3>
+                            {{ stats.result_status }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Recommendations -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        🏫
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Recommendations
+                        </p>
+
+                        <h3>
+                            {{ stats.recommendation_count }} Schools
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================
+                 QUICK ACTIONS
+                 ================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+
+                    <div>
+
+                        <span>
+                            QUICK ACTIONS
+                        </span>
+
+                        <h2>
+                            Get Started
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+
+                    <!-- Add Child -->
+
+                    <a href="/parent/child"
+                       class="quick-action">
+
+                        <div class="quick-icon">
+                            👧
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Add Child Details
+                            </h3>
+
+                            <p>
+                                Create your child's profile
+                                to begin.
+                            </p>
+
+                        </div>
+
+
+
+                    </a>
+
+
+                    <!-- Assessment -->
+
+                    <a href="/parent/assessment"
+                       class="quick-action">
+
+                        <div class="quick-icon">
+                            📝
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Start Assessment
+                            </h3>
+
+                            <p>
+                                Check your child's
+                                school-readiness skills.
+                            </p>
+
+                        </div>
+
+
+
+                    </a>
+
+
+                    <!-- Schools -->
+
+                    <a href="/parent/recommendations"
+                       class="quick-action">
+
+                        <div class="quick-icon">
+                            🏫
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Explore Schools
+                            </h3>
+
+                            <p>
+                                View suitable school
+                                recommendations.
+                            </p>
+
+                        </div>
+
+
+
+                    </a>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 HOW EDUMENTOR WORKS
+                 ================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+
+                    <div>
+
+                        <span>
+                            HOW IT WORKS
+                        </span>
+
+                        <h2>
+                            Your Journey with EduMentor
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="parent-steps">
+
+
+                    <div class="parent-step">
+
+                        <div class="parent-step-number">
+                            1
+                        </div>
+
+                        <h3>
+                            Add Child
+                        </h3>
+
+                        <p>
+                            Enter your child's basic
+                            information.
+                        </p>
+
+                    </div>
+
+
+                    <div class="parent-step">
+
+                        <div class="parent-step-number">
+                            2
+                        </div>
+
+                        <h3>
+                            Assessment
+                        </h3>
+
+                        <p>
+                            Complete the school-readiness
+                            assessment.
+                        </p>
+
+                    </div>
+
+
+                    <div class="parent-step">
+
+                        <div class="parent-step-number">
+                            3
+                        </div>
+
+                        <h3>
+                            AI Analysis
+                        </h3>
+
+                        <p>
+                            EduMentor analyzes the child's
+                            profile.
+                        </p>
+
+                    </div>
+
+
+                    <div class="parent-step">
+
+                        <div class="parent-step-number">
+                            4
+                        </div>
+
+                        <h3>
+                            School Recommendation
+                        </h3>
+
+                        <p>
+                            Get personalized school
+                            recommendations.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 FOOTER
+                 ================================= -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

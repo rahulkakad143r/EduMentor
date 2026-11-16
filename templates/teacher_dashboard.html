@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+                <a href="/">EduMentor</a>
+                <p>Teacher Portal</p>
+            </div>
+
+            <nav class="parent-menu">
+                <a href="/teacher/dashboard" class="active">
+                    <span>&#127968;</span> Dashboard
+                </a>
+                <a href="/teacher/children">
+                    <span>&#128103;</span> Assigned Children
+                </a>
+                <a href="/teacher/observation">
+                    <span>&#128221;</span> Record Observation
+                </a>
+                <a href="/teacher/observations">
+                    <span>&#128203;</span> My Observations
+                </a>
+                <a href="/teacher/recommend">
+                    <span>&#127979;</span> Recommend Schools
+                </a>
+                <a href="/teacher/recommendations">
+                    <span>&#9989;</span> My Recommendations
+                </a>
+            </nav>
+
+            <div class="parent-logout">
+                <a href="/logout">
+                    <span>&#128682;</span> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+            <header class="parent-topbar">
+                <div>
+                    <p class="dashboard-label">TEACHER DASHBOARD</p>
+                    <h1>Teacher Dashboard</h1>
+                </div>
+                <div class="parent-user">
+                    <div class="parent-avatar">&#128105;&#8205;&#127979;</div>
+                    <div>
+                        <strong>Teacher</strong>
+                        <small>{{ teacher.name }}</small>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for cat, msg in messages %}
+                            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 SUMMARY CARDS
+                 ================================= -->
+
+            <section class="dashboard-cards">
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">&#128103;</div>
+                    <div>
+                        <p>Assigned Children</p>
+                        <h3>{{ children | length }}</h3>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">&#128203;</div>
+                    <div>
+                        <p>Observations Recorded</p>
+                        <h3>{{ observations | length }}</h3>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 ASSIGNED CHILDREN
+                 ================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+                    <div>
+                        <span>ASSIGNED CHILDREN</span>
+                        <h2>Children Under Your Care</h2>
+                    </div>
+                </div>
+
+                {% if children %}
+                    <div class="quick-actions">
+
+                        {% for child in children %}
+                            <div class="quick-action">
+                                <div class="quick-icon">&#128103;</div>
+                                <div>
+                                    <h3>{{ child.child_name }}</h3>
+                                    <p>{{ child.gender | capitalize }} &bull; {{ child.current_class | upper }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                {% else %}
+                    <div class="child-note">
+                        <span>&#128161;</span>
+                        <div>
+                            <strong>No Children Assigned Yet</strong>
+                            <p>Go to Assigned Children to assign a child to your profile.</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================
+                 QUICK ACTIONS
+                 ================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+                    <div>
+                        <span>QUICK ACTIONS</span>
+                        <h2>Get Started</h2>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+
+                    <a href="/teacher/observation" class="quick-action">
+                        <div class="quick-icon">&#128221;</div>
+                        <div>
+                            <h3>Record Observation</h3>
+                            <p>Log a new observation for an assigned child.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </a>
+
+                    <a href="/teacher/observations" class="quick-action">
+                        <div class="quick-icon">&#128203;</div>
+                        <div>
+                            <h3>View Observations</h3>
+                            <p>Review all observations you have recorded.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </a>
+
+                    <a href="/teacher/children" class="quick-action">
+                        <div class="quick-icon">&#128103;</div>
+                        <div>
+                            <h3>Manage Children</h3>
+                            <p>Assign or view children in your care.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+                <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

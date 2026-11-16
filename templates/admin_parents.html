@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>All Parents - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         ALL PARENTS
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents"
+                   class="active">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        MANAGE PARENTS
+                    </p>
+
+                    <h1>
+                        All Parents
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 PARENTS TABLE
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👨‍👩‍👧
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Registered Parents
+                        </h2>
+
+                        <p>
+                            View all parents registered on EduMentor.
+                            Click a name to see full details, or reset
+                            their login credentials.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if parents %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>City</th>
+                                    <th>Children</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for parent in parents %}
+
+                                    <tr>
+
+                                        <td>
+                                            <a href="/admin/parent/{{ parent.id }}"
+                                               class="admin-detail-link">
+                                                {{ parent.name }}
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            {{ parent.username }}
+                                        </td>
+
+                                        <td>
+                                            {{ parent.email }}
+                                        </td>
+
+                                        <td>
+                                            {{ parent.phone }}
+                                        </td>
+
+                                        <td>
+                                            {{ parent.city }}
+                                        </td>
+
+                                        <td>
+                                            {{ parent.child_count }}
+                                        </td>
+
+                                        <td>
+                                            {{ parent.created_at[:10] }}
+                                        </td>
+
+                                        <td>
+                                            <details class="admin-actions">
+                                                <summary
+                                                    class="admin-actions-toggle">
+                                                    🔑 Reset Login
+                                                </summary>
+
+                                                <form
+                                                    action="/admin/parents"
+                                                    method="POST"
+                                                    class="admin-actions-form">
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="parent_id"
+                                                        value="{{ parent.id }}">
+
+                                                    <label for="u-parent-{{ parent.id }}">
+                                                        Username
+                                                    </label>
+
+                                                    <input
+                                                        type="text"
+                                                        id="u-parent-{{ parent.id }}"
+                                                        name="username"
+                                                        value="{{ parent.username }}"
+                                                        required
+                                                    >
+
+                                                    <label for="e-parent-{{ parent.id }}">
+                                                        Email
+                                                    </label>
+
+                                                    <input
+                                                        type="email"
+                                                        id="e-parent-{{ parent.id }}"
+                                                        name="email"
+                                                        value="{{ parent.email }}"
+                                                        required
+                                                    >
+
+                                                    <label for="p-parent-{{ parent.id }}">
+                                                        New Password
+                                                    </label>
+
+                                                    <input
+                                                        type="password"
+                                                        id="p-parent-{{ parent.id }}"
+                                                        name="password"
+                                                        placeholder="New password"
+                                                        minlength="6"
+                                                        required
+                                                    >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="action-btn"
+                                                    >
+                                                        Save Credentials
+                                                    </button>
+
+                                                </form>
+
+                                            </details>
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No parents registered yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

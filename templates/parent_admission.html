@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Details - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="parent-dashboard">
+
+    <aside class="parent-sidebar">
+        <div class="parent-logo"><a href="/">EduMentor</a><p>Parent Portal</p></div>
+        <nav class="parent-menu">
+            <a href="/parent/dashboard"><span>🏠</span> Dashboard</a>
+            <a href="/parent/child"><span>👧</span> Child Details</a>
+            <a href="/parent/assessment"><span>📝</span> Assessment</a>
+            <a href="/parent/results"><span>📊</span> Results</a>
+            <a href="/parent/observations"><span>👩‍🏫</span> Teacher Observations</a>
+            <a href="/parent/recommendations"><span>🏫</span> School Recommendations</a>
+            <a href="/parent/admissions" class="active"><span>📋</span> Admissions</a>
+            <a href="/parent/profile"><span>👤</span> My Profile</a>
+        </nav>
+        <div class="parent-logout"><a href="/login"><span>🚪</span> Logout</a></div>
+    </aside>
+
+    <main class="parent-main">
+        <header class="parent-topbar">
+            <div>
+                <p class="dashboard-label">ADMISSION DETAILS</p>
+                <h1>Admission — {{ school.name }}</h1>
+            </div>
+            <div class="parent-user">
+                <div class="parent-avatar">&#128106;</div>
+                <div><strong>Parent</strong><small>{{ parent.name }}</small></div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="child-info-card">
+    <div class="child-card-heading">
+        <div class="child-heading-icon">🏫</div>
+        <div>
+            <h2>{{ school.name }}</h2>
+            <p>{{ school.location }} · {{ school.syllabus }} · {{ school.classes }}</p>
+        </div>
+    </div>
+    <div class="child-form" style="padding: 0 20px 20px;">
+        <p><strong>Facilities:</strong> {{ school.facilities or 'N/A' }}</p>
+        <p><strong>Methodology:</strong> {{ school.methodology or 'N/A' }}</p>
+        <p><strong>Fees:</strong> {{ school.fees or 'N/A' }}</p>
+        <p><strong>Contact:</strong> {{ school.contact or 'N/A' }}</p>
+        <div class="match-bar" style="margin-top:12px;">
+            <div class="match-bar-fill" style="width: 100%; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+        </div>
+    </div>
+</div>
+
+<div class="child-info-card">
+    <div class="child-card-heading">
+        <div class="child-heading-icon">📝</div>
+        <div>
+            <h2>Admission Details</h2>
+            <p>Update your admission application information below.</p>
+        </div>
+    </div>
+
+    <form action="/parent/admission/{{ school.id }}" method="POST" class="child-form">
+
+        <div class="child-form-group">
+            <label for="status">Application Status</label>
+            <select id="status" name="status" required>
+                {% for s in statuses %}
+                    <option value="{{ s }}" {% if admission.status == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="child-form-group">
+            <label for="application_date">Application Date</label>
+            <input type="date" id="application_date" name="application_date" value="{{ admission.application_date or '' }}">
+        </div>
+
+        <div class="child-form-group">
+            <label for="interview_date">Interview Date</label>
+            <input type="date" id="interview_date" name="interview_date" value="{{ admission.interview_date or '' }}">
+        </div>
+
+        <div class="child-form-group full-width">
+            <label for="documents">Documents Submitted</label>
+            <textarea id="documents" name="documents" rows="3" placeholder="List of documents submitted, e.g. birth certificate, address proof, photos">{{ admission.documents or '' }}</textarea>
+        </div>
+
+        <div class="child-form-group">
+            <label for="fee">Admission Fee</label>
+            <input type="text" id="fee" name="fee" placeholder="e.g. ₹25,000" value="{{ admission.fee or '' }}">
+        </div>
+
+        <div class="child-form-group">
+            <label for="contact">School Contact Person</label>
+            <input type="text" id="contact" name="contact" placeholder="Contact person or number" value="{{ admission.contact or '' }}">
+        </div>
+
+        <div class="child-form-group full-width">
+            <label for="notes">Additional Notes</label>
+            <textarea id="notes" name="notes" rows="4" placeholder="Any additional notes or remarks">{{ admission.notes or '' }}</textarea>
+        </div>
+
+        <div class="child-form-buttons">
+            <a href="/parent/admissions" class="child-cancel-btn">Cancel</a>
+            <button type="submit" class="child-save-btn">Save Details</button>
+        </div>
+
+    </form>
+</div>
+
+<div class="child-info-card">
+    <div class="child-card-heading">
+        <div class="child-heading-icon">⚙️</div>
+        <div>
+            <h2>Track CAP Admission Process</h2>
+            <p>Follow the step-by-step CET / CAP admission workflow for this school.</p>
+        </div>
+    </div>
+    <div style="padding: 0 20px 20px;">
+        <a href="/parent/admission/{{ school.id }}/process" class="admission-apply-btn">
+            View Admission Process
+        </a>
+    </div>
+</div>
+
+        <footer class="parent-footer"><p>&copy; 2026 EduMentor | Personalized School Recommendation System</p></footer>
+    </main>
+</div>
+</body>
+</html>

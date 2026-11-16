@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Assessment Questions - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="/parent/child">
+                    <span>👧</span>
+                    Child Details
+                </a>
+
+                <a href="/parent/assessment"
+                   class="active">
+                    <span>📝</span>
+                    Assessment
+                </a>
+
+                <a href="/parent/results">
+                    <span>📊</span>
+                    Results
+                </a>
+
+                <a href="/parent/certificate">
+                    <span>🏅</span>
+                    Certificate
+                </a>
+
+                <a href="/parent/recommendations">
+                    <span>🏫</span>
+                    School Recommendations
+                </a>
+
+                <a href="/parent/admissions">
+                    <span>📋</span>
+                    Admissions
+                </a>
+
+                <a href="/parent/profile">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="parent-logout">
+
+                <a href="/login">
+                    <span>🚪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        CHILD ASSESSMENT
+                    </p>
+
+                    <h1>
+                        School Readiness Assessment 🧠
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            Assessment in progress
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================
+                 QUESTION AREA
+                 ================================= -->
+
+            <section class="question-section">
+
+                <div class="question-card">
+
+                    <!-- Progress -->
+
+                    <div class="question-progress">
+
+                        <div class="progress-info">
+
+                            <span id="questionNumber">
+                                Question 1
+                            </span>
+
+                            <span id="skillName">
+                                Language
+                            </span>
+
+                        </div>
+
+                        <div class="progress-bar">
+
+                            <div id="progressFill"></div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Question Navigation -->
+                    <div class="question-nav" id="questionNav"></div>
+
+
+                    <!-- Question -->
+
+                    <div class="question-content">
+
+                        <div class="question-icon">
+                            🧠
+                        </div>
+
+                        <h2 id="questionText">
+                            Which word starts with the letter B?
+                        </h2>
+
+
+                        <!-- Options -->
+
+                        <div id="optionsContainer"
+                             class="answer-options">
+                        </div>
+
+                    </div>
+
+
+                    <!-- Timer -->
+                    <div class="assessment-timer">
+                        <div class="timer-info">
+                            <span class="timer-icon">⏱️</span>
+                            <span class="timer-label">Time Remaining</span>
+                            <span class="timer-value" id="timerDisplay">10:00</span>
+                        </div>
+                        <div class="timer-bar">
+                            <div id="timerFill" class="timer-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+
+                    <div class="question-buttons">
+
+                        <button
+                            type="button"
+                            id="previousBtn"
+                            class="previous-btn"
+                            onclick="previousQuestion()"
+                            disabled
+                        >
+                            ← Previous
+                        </button>
+
+                        <button
+                            type="button"
+                            id="saveBtn"
+                            class="previous-btn"
+                            onclick="saveProgress()"
+                        >
+                            Save
+                        </button>
+
+                        <button
+                            type="button"
+                            id="submitNowBtn"
+                            class="previous-btn"
+                            onclick="confirmSubmit()"
+                        >
+                            Submit
+                        </button>
+
+                        <button
+                            type="button"
+                            id="nextBtn"
+                            class="next-btn"
+                            onclick="nextQuestion()"
+                        >
+                            Next
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Disclaimer -->
+
+                <div class="question-disclaimer">
+
+                    <strong>Note:</strong>
+
+                    This assessment is designed to understand basic
+                    school-readiness skills. It is not an IQ test,
+                    psychological diagnosis, or medical assessment.
+
+                </div>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =================================
+         JAVASCRIPT
+         ================================= -->
+
+    <script>
+
+    const questions = {{ questions | tojson | safe }};
+
+
+    let currentQuestion = 0;
+    let selectedAnswers = new Array(questions.length).fill(null);
+
+    const TEST_DURATION_SECONDS = 10 * 60;
+    let timeRemaining = TEST_DURATION_SECONDS;
+    let timerInterval = null;
+    let submitted = false;
+
+
+    /* Load Question */
+
+    function loadQuestion() {
+
+        const question = questions[currentQuestion];
+
+        document.getElementById("questionNumber").innerText =
+            "Question " + (currentQuestion + 1) +
+            " of " + questions.length;
+
+        document.getElementById("skillName").innerText =
+            question.skill;
+
+        document.getElementById("questionText").innerText =
+            question.question;
+
+        document.querySelector(".question-icon").innerText =
+            question.icon;
+
+
+        /* Progress */
+
+        const progress =
+            ((currentQuestion + 1) / questions.length) * 100;
+
+        document.getElementById("progressFill").style.width =
+            progress + "%";
+
+
+        /* Options */
+
+        const container =
+            document.getElementById("optionsContainer");
+
+        container.innerHTML = "";
+
+
+        const isAttempted = selectedAnswers[currentQuestion] !== null;
+
+        question.options.forEach((option, index) => {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+
+            button.className = "answer-option";
+
+            button.innerText = option;
+
+
+            if (selectedAnswers[currentQuestion] === index) {
+                button.classList.add("selected");
+            }
+
+            if (isAttempted) {
+                button.classList.add("disabled");
+            }
+
+
+            button.onclick = function () {
+                if (selectedAnswers[currentQuestion] !== null) {
+                    return;
+                }
+
+                selectedAnswers[currentQuestion] = index;
+
+                document
+                    .querySelectorAll(".answer-option")
+                    .forEach(btn => {
+                        btn.classList.remove("selected");
+                    });
+
+                button.classList.add("selected");
+                renderQuestionNav();
+
+            };
+
+
+            container.appendChild(button);
+
+        });
+
+
+        /* Previous Button */
+
+        document.getElementById("previousBtn").disabled =
+            currentQuestion === 0;
+
+
+        renderQuestionNav();
+
+        /* Next / Submit */
+
+        const nextButton =
+            document.getElementById("nextBtn");
+
+        if (currentQuestion === questions.length - 1) {
+
+            nextButton.innerText =
+                "Submit Assessment \u2713";
+
+            nextButton.classList.add("submit-btn");
+
+        } else {
+
+            nextButton.innerText =
+                "Next";
+
+            nextButton.classList.remove("submit-btn");
+
+        }
+
+    }
+
+
+    /* Next Question */
+
+    function nextQuestion() {
+
+        if (selectedAnswers[currentQuestion] === null) {
+
+            alert("Please select an answer before continuing.");
+
+            return;
+
+        }
+
+
+        if (currentQuestion < questions.length - 1) {
+
+            currentQuestion++;
+
+            loadQuestion();
+
+        } else {
+
+            confirmSubmit();
+
+        }
+
+    }
+
+
+    /* Previous Question */
+
+    function renderQuestionNav() {
+        const navContainer = document.getElementById("questionNav");
+        if (!navContainer) return;
+        navContainer.innerHTML = "";
+
+        questions.forEach((q, index) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "question-nav-btn";
+            btn.innerText = index + 1;
+
+            if (index === currentQuestion) {
+                btn.classList.add("active");
+            }
+
+            if (selectedAnswers[index] !== null) {
+                btn.classList.add("attempted");
+            } else {
+                btn.classList.add("not-attempted");
+            }
+
+            btn.onclick = function () {
+                currentQuestion = index;
+                loadQuestion();
+            };
+
+            navContainer.appendChild(btn);
+        });
+    }
+
+    function previousQuestion() {
+
+        if (currentQuestion > 0) {
+
+            currentQuestion--;
+
+            loadQuestion();
+
+        }
+
+    }
+
+
+    /* Timer */
+    function formatTime(seconds) {
+        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+        return m + ":" + s;
+    }
+
+    function updateTimerDisplay() {
+        if (submitted) return;
+        document.getElementById("timerDisplay").innerText = formatTime(timeRemaining);
+        const percent = (timeRemaining / TEST_DURATION_SECONDS) * 100;
+        document.getElementById("timerFill").style.width = percent + "%";
+        if (timeRemaining <= 0) {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            alert("Time limit exhausted. Your assessment will be submitted automatically.");
+            submitAssessment(true);
+        }
+    }
+
+    function startTimer() {
+        if (timerInterval) return;
+        timerInterval = setInterval(function () {
+            if (submitted) {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                return;
+            }
+            timeRemaining -= 1;
+            updateTimerDisplay();
+        }, 1000);
+        updateTimerDisplay();
+    }
+
+    /* Save / Confirm / Submit */
+    function saveProgress() {
+        alert("Your answers have been saved. You can continue the assessment.");
+    }
+
+    function confirmSubmit() {
+        const unanswered = selectedAnswers.filter(function (a) { return a === null; }).length;
+        let msg = "Are you sure you want to submit the assessment?";
+        if (unanswered > 0) {
+            msg = "You have " + unanswered + " unanswered question(s). Are you sure you want to submit?";
+        }
+        if (confirm(msg)) {
+            submitAssessment(false);
+        }
+    }
+
+    function submitAssessment(auto) {
+        if (submitted) return;
+        submitted = true;
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        if (auto) {
+            document.getElementById("nextBtn").disabled = true;
+            document.getElementById("previousBtn").disabled = true;
+            document.getElementById("saveBtn").disabled = true;
+            document.getElementById("submitNowBtn").disabled = true;
+        }
+        fetch("/parent/assessment/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                answers: selectedAnswers,
+                question_ids: questions.map(function (q) { return q.id; })
+            })
+        })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+
+            if (data.success) {
+
+                window.location.href =
+                    data.redirect || "/parent/results";
+
+                return;
+
+            }
+
+            if (data.redirect) {
+
+                window.location.href = data.redirect;
+
+                return;
+
+            }
+
+            submitted = false;
+            if (!timerInterval) {
+                startTimer();
+            }
+            alert(data.error || "Could not submit. Please try again.");
+
+        })
+        .catch(function () {
+
+            submitted = false;
+            if (!timerInterval) {
+                startTimer();
+            }
+            alert("Could not submit your answers. Please try again.");
+
+        });
+
+    }
+
+
+    /* Start */
+
+    loadQuestion();
+    startTimer();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="/parent/child">
+                    <span>👧</span>
+                    Child Details
+                </a>
+
+                <a href="/parent/assessment">
+                    <span>📝</span>
+                    Assessment
+                </a>
+
+                <a href="/parent/results">
+                    <span>📊</span>
+                    Results
+                </a>
+
+                <a href="/parent/certificate">
+                    <span>🏅</span>
+                    Certificate
+                </a>
+
+                <a href="/parent/observations">
+                    <span>👩‍🏫</span>
+                    Teacher Observations
+                </a>
+
+                <a href="/parent/recommendations">
+                    <span>🏫</span>
+                    School Recommendations
+                </a>
+
+                <a href="/parent/admissions">
+                    <span>📋</span>
+                    Admissions
+                </a>
+
+                <a href="/parent/profile"
+                   class="active">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="parent-logout">
+
+                <a href="/login">
+                    <span>🚪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        MY PROFILE
+                    </p>
+
+                    <h1>
+                        Parent Profile 👤
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            EduMentor User
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 PROFILE CARD
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Parent Information
+                        </h2>
+
+                        <p>
+                            Update your contact information and preferences.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     PROFILE FORM
+                     ================================= -->
+
+                <form action="/parent/profile"
+                      method="POST"
+                      class="child-form">
+
+
+                    <!-- Full Name -->
+
+                    <div class="child-form-group">
+
+                        <label for="parent_name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="parent_name"
+                            name="parent_name"
+                            placeholder="Enter your full name"
+                            value="{{ parent.name }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="child-form-group">
+
+                        <label for="parent_email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="parent_email"
+                            name="parent_email"
+                            placeholder="Enter your email address"
+                            value="{{ parent.email }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Mobile Number -->
+
+                    <div class="child-form-group">
+
+                        <label for="parent_phone">
+                            Mobile Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="parent_phone"
+                            name="parent_phone"
+                            placeholder="Enter your mobile number"
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            title="Please enter a valid 10-digit mobile number"
+                            value="{{ parent.phone }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- City -->
+
+                    <div class="child-form-group">
+
+                        <label for="parent_city">
+                            City / Area
+                        </label>
+
+                        <input
+                            type="text"
+                            id="parent_city"
+                            name="parent_city"
+                            placeholder="Enter your city / area"
+                            value="{{ parent.city }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Preferred Contact Time -->
+
+                    <div class="child-form-group">
+
+                        <label for="contact_time">
+                            Preferred Contact Time
+                        </label>
+
+                        <select
+                            id="contact_time"
+                            name="contact_time"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select Time --
+                            </option>
+
+                            <option value="morning"
+                                {% if parent.contact_time == 'morning' %}selected{% endif %}>
+                                Morning (9 AM - 12 PM)
+                            </option>
+
+                            <option value="afternoon"
+                                {% if parent.contact_time == 'afternoon' %}selected{% endif %}>
+                                Afternoon (12 PM - 4 PM)
+                            </option>
+
+                            <option value="evening"
+                                {% if parent.contact_time == 'evening' %}selected{% endif %}>
+                                Evening (4 PM - 8 PM)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Language Preference -->
+
+                    <div class="child-form-group">
+
+                        <label for="parent_language">
+                            Preferred Language
+                        </label>
+
+                        <select
+                            id="parent_language"
+                            name="parent_language"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select Language --
+                            </option>
+
+                            <option value="english"
+                                {% if parent.language == 'english' %}selected{% endif %}>
+                                English
+                            </option>
+
+                            <option value="marathi"
+                                {% if parent.language == 'marathi' %}selected{% endif %}>
+                                Marathi
+                            </option>
+
+                            <option value="hindi"
+                                {% if parent.language == 'hindi' %}selected{% endif %}>
+                                Hindi
+                            </option>
+
+                            <option value="other"
+                                {% if parent.language == 'other' %}selected{% endif %}>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Additional Information -->
+
+                    <div class="child-form-group full-width">
+
+                        <label for="parent_info">
+                            Additional Information
+                        </label>
+
+                        <textarea
+                            id="parent_info"
+                            name="parent_info"
+                            rows="4"
+                            placeholder="Enter any additional information"
+                        >{{ parent.additional_info }}</textarea>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="child-form-buttons">
+
+                        <a href="/parent/dashboard"
+                           class="child-cancel-btn">
+
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="child-save-btn"
+                        >
+
+                            Save Profile
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </section>
+
+
+            <!-- =================================
+                 INFORMATION NOTE
+                 ================================= -->
+
+            <div class="child-note">
+
+                <span>
+                    💡
+                </span>
+
+                <div>
+
+                    <strong>
+                        Why keep your profile updated?
+                    </strong>
+
+                    <p>
+                        Your contact details help EduMentor
+                        provide school-related information and
+                        updates based on your location and
+                        preferences.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

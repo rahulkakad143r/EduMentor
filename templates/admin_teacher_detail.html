@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Details - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         TEACHER DETAIL
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers"
+                   class="active">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        TEACHER DETAILS
+                    </p>
+
+                    <h1>
+                        {{ teacher.name }}
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 DETAILS
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👨‍🏫
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Account Information
+                        </h2>
+
+                        <p>
+                            Full registration details for this teacher.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <small>Name</small>
+                        <strong>{{ teacher.name }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Username</small>
+                        <strong>{{ teacher.username }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Email</small>
+                        <strong>{{ teacher.email }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Phone</small>
+                        <strong>{{ teacher.phone }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>City</small>
+                        <strong>{{ teacher.city }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Qualification</small>
+                        <strong>
+                            {% if teacher.qualification %}
+                                {{ teacher.qualification }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Experience</small>
+                        <strong>
+                            {% if teacher.experience %}
+                                {{ teacher.experience }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Registered On</small>
+                        <strong>{{ teacher.created_at[:10] }}</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 ASSIGNED CHILDREN
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👧
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Assigned Children
+                        </h2>
+
+                        <p>
+                            {{ teacher.name }} is assigned to
+                            {{ children|length }} child(ren).
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if children %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Child</th>
+                                    <th>Parent</th>
+                                    <th>Class</th>
+                                    <th>Location</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for child in children %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ child.child_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.parent_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.current_class }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.location }}
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No children assigned to this teacher.
+                    </p>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

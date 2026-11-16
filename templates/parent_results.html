@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Assessment Results - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="/parent/child">
+                    <span>👧</span>
+                    Child Details
+                </a>
+
+                <a href="/parent/assessment">
+                    <span>📝</span>
+                    Assessment
+                </a>
+
+                <a href="/parent/results"
+                   class="active">
+                    <span>📊</span>
+                    Results
+                </a>
+
+                <a href="/parent/certificate">
+                    <span>🏅</span>
+                    Certificate
+                </a>
+
+                <a href="/parent/observations">
+                    <span>👩‍🏫</span>
+                    Teacher Observations
+                </a>
+
+                <a href="/parent/recommendations">
+                    <span>🏫</span>
+                    School Recommendations
+                </a>
+
+                <a href="/parent/admissions">
+                    <span>📋</span>
+                    Admissions
+                </a>
+
+                <a href="/parent/profile">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="parent-logout">
+
+                <a href="/login">
+                    <span>🚪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        ASSESSMENT RESULTS
+                    </p>
+
+                    <h1>
+                        Results & Readiness Report 📊
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            EduMentor User
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 INTRODUCTION
+                 ================================= -->
+
+            <section class="assessment-intro">
+
+                <div class="assessment-intro-icon">
+                    📊
+                </div>
+
+                <div>
+
+                    <span>
+                        READINESS REPORT
+                    </span>
+
+                    <h2>
+                        Your Child's Results
+                        {% if child %}— {{ child.child_name }}{% endif %}
+                    </h2>
+
+                    <p>
+                        Results will appear here after your child
+                        completes the school-readiness assessment.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 SUMMARY CARDS
+                 ================================= -->
+
+            <section class="dashboard-cards">
+
+
+                <!-- Overall -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        🎯
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Overall Readiness
+                        </p>
+
+                        <h3>
+                            {% if assessment and assessment.status == 'completed' %}
+                                {{ (assessment.overall_score / 100 * total_questions) | round | int }} / {{ total_questions }} marks
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </h3>
+
+                        {% if assessment and assessment.status == 'completed' %}
+                            <small>
+                                {{ assessment.overall_score }}% overall
+                            </small>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Skills -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        🧠
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Skills Assessed
+                        </p>
+
+                        <h3>
+                            {{ assessments|length if assessments else 0 }} / 8
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Completed -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        ✅
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Completed
+                        </p>
+
+                        <h3>
+                            {% if child and assessment and assessment.status == 'completed' %}
+                                Yes
+                            {% elif child %}
+                                Not Yet
+                            {% else %}
+                                Not Started
+                            {% endif %}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📅
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Report Status
+                        </p>
+
+                        <h3>
+                            {% if assessment and assessment.status == 'completed' %}
+                                Ready
+                            {% else %}
+                                Awaiting
+                            {% endif %}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================
+                 SKILL BREAKDOWN
+                 ================================= -->
+
+            <section class="assessment-skills">
+
+                <div class="assessment-section-heading">
+
+                    <span>
+                        SKILL BREAKDOWN
+                    </span>
+
+                    <h2>
+                        Performance by Skill Area
+                    </h2>
+
+                    <p>
+                        Detailed results for each school-readiness skill.
+                    </p>
+
+                </div>
+
+
+                <div class="skill-grid">
+
+                    {% for skill in skills %}
+
+                        <div class="skill-card">
+
+                            <div class="skill-icon">
+                                {{ skill.icon }}
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    {{ skill.name }}
+                                </h3>
+
+                                <p>
+                                    {% if skill.score is not none %}
+                                        Marks: {{ (skill.score / 100 * skill.asked) | round | int }} of {{ skill.asked }}
+                                    {% else %}
+                                        School-readiness skill score
+                                        for this area.
+                                    {% endif %}
+                                </p>
+
+                            </div>
+
+                            <span>
+                                {{ (skill.score ~ '%') if skill.score is not none else 'Pending' }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 INFORMATION NOTE
+                 ================================= -->
+
+            <div class="child-note">
+
+                <span>
+                    💡
+                </span>
+
+                <div>
+
+                    <strong>
+                        {% if assessment and assessment.status == 'completed' %}
+                            Report ready
+                        {% elif child %}
+                            Assessment not completed yet
+                        {% else %}
+                            Not assessed yet
+                        {% endif %}
+                    </strong>
+
+                    <p>
+                        {% if assessment and assessment.status == 'completed' %}
+                            Your child's readiness report is ready.
+                            View the school recommendations based on
+                            these results.
+                        {% else %}
+                            Complete the assessment to see your child's
+                            readiness report and personalized school
+                            recommendations.
+                        {% endif %}
+                    </p>
+
+                    {% if assessment and assessment.status == 'completed' %}
+                        <a href="/parent/certificate"
+                           class="primary-btn certificate-cta">
+                            🏅 View Certificate
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

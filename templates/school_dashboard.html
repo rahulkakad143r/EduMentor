@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>School Dashboard - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         SCHOOL DASHBOARD
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    School Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/school/dashboard"
+                   class="active">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/school/profile">
+
+                    <span>📝</span>
+                    School Profile
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        SCHOOL PORTAL
+                    </p>
+
+                    <h1>
+                        School Dashboard
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#127979;</div>
+
+                    <div>
+
+                        <strong>
+                            School
+                        </strong>
+
+                        <small>
+                            {{ school.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 WELCOME CARD
+                 ================================= -->
+
+            <section class="dashboard-welcome">
+
+                <div>
+
+                    <span>
+                        Welcome Back, {{ school.name }}!
+                    </span>
+
+                    <h2>
+                        Manage your school profile
+                        and stay up to date.
+                    </h2>
+
+                    <p>
+                        With EduMentor, parents can find your
+                        school through personalized recommendations.
+                        Keep your profile complete to attract
+                        the right students.
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-icon">
+                    🏫
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 SUMMARY CARDS
+                 ================================= -->
+
+            <section class="dashboard-cards">
+
+
+                <!-- School Name -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        🏛️
+                    </div>
+
+                    <div>
+
+                        <p>
+                            School Name
+                        </p>
+
+                        <h3>
+                            {{ school.name }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📍
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Location
+                        </p>
+
+                        <h3>
+                            {{ school.location }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Syllabus -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📚
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Syllabus
+                        </p>
+
+                        <h3>
+                            {{ school.syllabus }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Matched Recommendations -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        ⭐
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Matched Recommendations
+                        </p>
+
+                        <h3>
+                            {{ recommendation_count }}
+                        </h3>
+
+                        <small>
+                            Students
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Applications Received -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📥
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Applications Received
+                        </p>
+
+                        <h3>
+                            {{ applied|length }}
+                        </h3>
+
+                        <small>
+                            Pending review
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================
+                 APPLIED STUDENTS
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        📥
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Applied Students
+                        </h2>
+
+                        <p>
+                            Review applications and take decisions based on
+                            each child's readiness score.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if applied %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Class</th>
+                                    <th>Parent / Contact</th>
+                                    <th>Readiness</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for app in applied %}
+                                    <tr>
+
+                                        <td>
+                                            <strong>{{ app.child_name }}</strong>
+                                        </td>
+
+                                        <td>
+                                            {{ app.current_class }}
+                                        </td>
+
+                                        <td>
+                                            {{ app.parent_name }}
+                                            <br>
+                                            <small style="color:var(--muted)">
+                                                {{ app.parent_phone }}
+                                            </small>
+                                        </td>
+
+                                        <td>
+                                            <b style="color:{{
+                                                '#1a9d49' if app.overall_score is not none and app.overall_score >= threshold
+                                                else '#d9534f' }}">
+                                                {{ app.readiness|int }}%
+                                            </b>
+                                            {% if app.overall_score is not none %}
+                                                <small style="color:var(--muted)">
+                                                    assessment {{ app.overall_score|int }}%
+                                                </small>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <span class="status-badge status-{{
+                                                'admitted' if app.status == 'Admitted'
+                                                else 'selected' if app.status == 'Selected'
+                                                else 'rejected' if app.status == 'Rejected'
+                                                else 'interview-scheduled' if app.status == 'Interview Scheduled'
+                                                else 'applied' }}">
+                                                {{ app.status }}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            {% if app.status in ('Selected', 'Admitted', 'Rejected') %}
+
+                                                <span style="color:var(--muted)">
+                                                    No further action
+                                                </span>
+
+                                            {% else %}
+
+                                                {% if app.readiness >= threshold %}
+
+                                                    <form method="post"
+                                                          action="{{ url_for('school_admission_status', admission_id=app.admission_id) }}"
+                                                          style="display:inline">
+                                                        <input type="hidden" name="action" value="interview">
+                                                        <input type="date" name="interview_date"
+                                                               style="padding:4px;font-size:12px">
+                                                        <button type="submit" class="school-action-btn">
+                                                            Schedule Interview
+                                                        </button>
+                                                    </form>
+
+                                                    <form method="post"
+                                                          action="{{ url_for('school_admission_status', admission_id=app.admission_id) }}"
+                                                          style="display:inline">
+                                                        <input type="hidden" name="action" value="select">
+                                                        <button type="submit" class="school-action-btn school-action-btn-success">
+                                                            Select
+                                                        </button>
+                                                    </form>
+
+                                                    <form method="post"
+                                                          action="{{ url_for('school_admission_status', admission_id=app.admission_id) }}"
+                                                          style="display:inline">
+                                                        <input type="hidden" name="action" value="admit">
+                                                        <button type="submit" class="school-action-btn school-action-btn-success">
+                                                            Admit
+                                                        </button>
+                                                    </form>
+
+                                                {% else %}
+
+                                                    <small style="color:#d9534f">
+                                                        Below {{ threshold }}% — cannot be selected
+                                                    </small>
+
+                                                {% endif %}
+
+                                                <form method="post"
+                                                      action="{{ url_for('school_admission_status', admission_id=app.admission_id) }}"
+                                                      style="display:inline">
+                                                    <input type="hidden" name="action" value="reject">
+                                                    <button type="submit" class="school-action-btn school-action-btn-danger">
+                                                        Reject
+                                                    </button>
+                                                </form>
+
+                                            {% endif %}
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No applications yet. When a parent applies to your
+                        school, their child will appear here with their
+                        readiness score.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================
+                 PROFILE REMINDER
+                 ================================= -->
+
+            <div class="child-note">
+
+                <span>
+                    💡
+                </span>
+
+                <div>
+
+                    <strong>
+                        Keep your profile updated!
+                    </strong>
+
+                    <p>
+                        Your complete school profile helps EduMentor
+                        match your school with the most suitable
+                        students in your area. Review it regularly.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

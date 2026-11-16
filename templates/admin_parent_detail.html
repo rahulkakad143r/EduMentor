@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Parent Details - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         PARENT DETAIL
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents"
+                   class="active">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        PARENT DETAILS
+                    </p>
+
+                    <h1>
+                        {{ parent.name }}
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 DETAILS
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👨‍👩‍👧
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Account Information
+                        </h2>
+
+                        <p>
+                            Full registration details for this parent.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <small>Name</small>
+                        <strong>{{ parent.name }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Username</small>
+                        <strong>{{ parent.username }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Email</small>
+                        <strong>{{ parent.email }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Phone</small>
+                        <strong>{{ parent.phone }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>City</small>
+                        <strong>{{ parent.city }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Preferred Contact Time</small>
+                        <strong>{{ parent.contact_time }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Language</small>
+                        <strong>{{ parent.language }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Registered On</small>
+                        <strong>{{ parent.created_at[:10] }}</strong>
+                    </div>
+
+                    <div class="detail-item full">
+                        <small>Additional Info</small>
+                        <strong>
+                            {% if parent.additional_info %}
+                                {{ parent.additional_info }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 CHILDREN
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👧
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Children
+                        </h2>
+
+                        <p>
+                            {{ parent.name }} has {{ children|length }}
+                            registered child(ren).
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if children %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Child</th>
+                                    <th>DOB</th>
+                                    <th>Gender</th>
+                                    <th>Class</th>
+                                    <th>Location</th>
+                                    <th>Language</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for child in children %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ child.child_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.dob }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.gender }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.current_class }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.location }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.language }}
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No children registered for this parent.
+                    </p>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

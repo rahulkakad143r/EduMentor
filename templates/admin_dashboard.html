@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         ADMIN DASHBOARD
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard"
+                   class="active">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        ADMIN PANEL
+                    </p>
+
+                    <h1>
+                        Admin Dashboard
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 SUMMARY CARDS
+                 ================================= -->
+
+            <section class="dashboard-cards">
+
+
+                <!-- Parents -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        👨‍👩‍👧
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Parents
+                        </p>
+
+                        <h3>
+                            {{ counts.parents }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Teachers -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        👨‍🏫
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Teachers
+                        </p>
+
+                        <h3>
+                            {{ counts.teachers }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Schools -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        🏫
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Schools
+                        </p>
+
+                        <h3>
+                            {{ counts.schools }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Children -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        👧
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Children
+                        </p>
+
+                        <h3>
+                            {{ counts.children }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Assessments -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Assessments
+                        </p>
+
+                        <h3>
+                            {{ counts.assessments }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================
+                 ADMIN CAPABILITIES NOTE
+                 ================================= -->
+
+            <div class="child-note">
+
+                <span>
+                    💡
+                </span>
+
+                <div>
+
+                    <strong>
+                        Manage the EduMentor Platform
+                    </strong>
+
+                    <p>
+                        As an admin, you can view all parents,
+                        children, teachers, schools, and assessments.
+                        You can also assign teachers to children
+                        for better learning support.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 CHILDREN & CONNECTED DATA
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        👧
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Children &amp; Connected Data
+                        </h2>
+
+                        <p>
+                            Every child linked to parent, teachers,
+                            assessment, recommendations and admission status.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if children %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Child</th>
+                                    <th>Parent</th>
+                                    <th>Class</th>
+                                    <th>Location</th>
+                                    <th>Teachers</th>
+                                    <th>Assessment</th>
+                                    <th>Recommendations</th>
+                                    <th>Admission</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for child in children %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ child.child_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.parent_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.current_class }}
+                                        </td>
+
+                                        <td>
+                                            {{ child.location }}
+                                        </td>
+
+                                        <td>
+                                            {% if child.teachers %}
+                                                {{ child.teachers }}
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if child.assessment_status == 'completed' %}
+                                                <span class="status-badge status-selected">
+                                                    ✓ {{ child.assessment_score }}%
+                                                </span>
+                                            {% elif child.assessment_status %}
+                                                <span class="status-badge status-applied">
+                                                    In Progress
+                                                </span>
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {{ child.rec_count }}
+                                        </td>
+
+                                        <td>
+                                            {% if child.admission_status %}
+                                                <span class="status-badge status-{{ child.admission_status|lower|replace(' ', '-') }}">
+                                                    {{ child.admission_status }}
+                                                </span>
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No children registered yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Observation - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+                <a href="/">EduMentor</a>
+                <p>Teacher Portal</p>
+            </div>
+
+            <nav class="parent-menu">
+                <a href="/teacher/dashboard">
+                    <span>&#127968;</span> Dashboard
+                </a>
+                <a href="/teacher/children">
+                    <span>&#128103;</span> Assigned Children
+                </a>
+                <a href="/teacher/observation" class="active">
+                    <span>&#128221;</span> Record Observation
+                </a>
+                <a href="/teacher/observations">
+                    <span>&#128203;</span> My Observations
+                </a>
+                <a href="/teacher/recommend">
+                    <span>&#127979;</span> Recommend Schools
+                </a>
+                <a href="/teacher/recommendations">
+                    <span>&#9989;</span> My Recommendations
+                </a>
+            </nav>
+
+            <div class="parent-logout">
+                <a href="/logout">
+                    <span>&#128682;</span> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+            <header class="parent-topbar">
+                <div>
+                    <p class="dashboard-label">RECORD OBSERVATION</p>
+                    <h1>Record Observation</h1>
+                </div>
+                <div class="parent-user">
+                    <div class="parent-avatar">&#128105;&#8205;&#127979;</div>
+                    <div>
+                        <strong>Teacher</strong>
+                        <small>{{ teacher.name }}</small>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for cat, msg in messages %}
+                            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 OBSERVATION FORM
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+                    <div class="child-heading-icon">&#128221;</div>
+                    <div>
+                        <h2>New Observation</h2>
+                        <p>Fill in the details below to record a new observation for an assigned child.</p>
+                    </div>
+                </div>
+
+                <form action="/teacher/observation" method="POST" class="child-form">
+
+                    <div class="child-form-group">
+                        <label for="child_id">Select Child</label>
+                        <select id="child_id" name="child_id" required>
+                            <option value="">-- Select a Child --</option>
+                            {% for child in children %}
+                                <option value="{{ child.id }}" {% if child_id == child.id %}selected{% endif %}>
+                                    {{ child.child_name }} ({{ child.gender | capitalize }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="child-form-group">
+                        <label for="skill">Skill Area</label>
+                        <select id="skill" name="skill" required>
+                            <option value="">-- Select a Skill --</option>
+                            {% for skill_name, skill_icon in skills %}
+                                <option value="{{ skill_name }}" {% if selected_skill == skill_name %}selected{% endif %}>
+                                    {{ skill_icon }} {{ skill_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="child-form-group">
+                        <label for="rating">Rating (1-5)</label>
+                        <select id="rating" name="rating" required>
+                            <option value="">-- Select Rating --</option>
+                            <option value="1" {% if rating == 1 %}selected{% endif %}>1 - Very Weak</option>
+                            <option value="2" {% if rating == 2 %}selected{% endif %}>2 - Weak</option>
+                            <option value="3" {% if rating == 3 %}selected{% endif %}>3 - Average</option>
+                            <option value="4" {% if rating == 4 %}selected{% endif %}>4 - Good</option>
+                            <option value="5" {% if rating == 5 %}selected{% endif %}>5 - Excellent</option>
+                        </select>
+                    </div>
+
+                    <div class="child-form-group full-width">
+                        <label for="remarks">Remarks</label>
+                        <textarea id="remarks" name="remarks" rows="4"
+                            placeholder="Enter any observations or notes about the child's performance"
+                        >{{ remarks if remarks else '' }}</textarea>
+                    </div>
+
+                    <div class="child-form-buttons">
+                        <a href="/teacher/dashboard" class="child-cancel-btn">Cancel</a>
+                        <button type="submit" class="child-save-btn">Save Observation &rarr;</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+                <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

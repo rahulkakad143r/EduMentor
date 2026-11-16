@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Observations - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="/parent/child">
+                    <span>👧</span>
+                    Child Details
+                </a>
+
+                <a href="/parent/assessment">
+                    <span>📝</span>
+                    Assessment
+                </a>
+
+                <a href="/parent/results">
+                    <span>📊</span>
+                    Results
+                </a>
+
+                <a href="/parent/certificate">
+                    <span>🏅</span>
+                    Certificate
+                </a>
+
+                <a href="/parent/observations"
+                   class="active">
+                    <span>👩‍🏫</span>
+                    Teacher Observations
+                </a>
+
+                <a href="/parent/recommendations">
+                    <span>🏫</span>
+                    School Recommendations
+                </a>
+
+                <a href="/parent/admissions">
+                    <span>📋</span>
+                    Admissions
+                </a>
+
+                <a href="/parent/profile">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+                    <span>🚪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        TEACHER OBSERVATIONS
+                    </p>
+
+                    <h1>
+                        My Child's Observations 👩‍🏫
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            EduMentor User
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 INTRODUCTION
+                 ================================= -->
+
+            <section class="assessment-intro">
+
+                <div class="assessment-intro-icon">
+                    👩‍🏫
+                </div>
+
+                <div>
+
+                    <span>
+                        CLASSROOM FEEDBACK
+                    </span>
+
+                    <h2>
+                        Teacher Observations
+                        {% if child %}— {{ child.child_name }}{% endif %}
+                    </h2>
+
+                    <p>
+                        Observations recorded by your child's teacher about
+                        their classroom behaviour, skills and progress.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 OBSERVATIONS TABLE
+                 ================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+                    <div>
+                        <span>OBSERVATION LOG</span>
+                        <h2>Recorded Observations</h2>
+                    </div>
+                </div>
+
+                {% if observations %}
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+                            <thead>
+                                <tr style="background:#6c5ce7;color:#fff;text-align:left;">
+                                    <th style="padding:14px 18px;">Teacher</th>
+                                    <th style="padding:14px 18px;">Skill</th>
+                                    <th style="padding:14px 18px;">Rating</th>
+                                    <th style="padding:14px 18px;">Remarks</th>
+                                    <th style="padding:14px 18px;">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obs in observations %}
+                                    <tr style="border-bottom:1px solid #f0f0f0;">
+                                        <td style="padding:14px 18px;font-weight:600;">{{ obs.teacher_name }}</td>
+                                        <td style="padding:14px 18px;">{{ obs.skill }}</td>
+                                        <td style="padding:14px 18px;">
+                                            {% for i in range(obs.rating) %}&#9733;{% endfor %}{% for i in range(5 - obs.rating) %}&#9734;{% endfor %}
+                                            <span style="margin-left:6px;color:#6c5ce7;font-weight:600;">{{ obs.rating }}/5</span>
+                                        </td>
+                                        <td style="padding:14px 18px;">{{ obs.remarks if obs.remarks else '—' }}</td>
+                                        <td style="padding:14px 18px;">{{ obs.obs_date }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="child-note">
+                        <span>&#128161;</span>
+                        <div>
+                            <strong>No Observations Yet</strong>
+                            <p>Your child's teacher has not recorded any observations yet. Please check back later.</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+                <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>School Details - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         SCHOOL DETAIL
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools"
+                   class="active">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        SCHOOL DETAILS
+                    </p>
+
+                    <h1>
+                        {{ school.name }}
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 DETAILS
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        🏫
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            School Information
+                        </h2>
+
+                        <p>
+                            Full profile details for this school.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <small>School Name</small>
+                        <strong>{{ school.name }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Location</small>
+                        <strong>{{ school.location }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Syllabus</small>
+                        <strong>{{ school.syllabus }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Classes Offered</small>
+                        <strong>{{ school.classes }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Annual Fees</small>
+                        <strong>{{ school.fees }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Rating</small>
+                        <strong>{{ school.rating }} / 5</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Login Username</small>
+                        <strong>
+                            {% if school.username %}
+                                {{ school.username }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Login Email</small>
+                        <strong>
+                            {% if school.email %}
+                                {{ school.email }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Phone</small>
+                        <strong>
+                            {% if school.phone %}
+                                {{ school.phone }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Contact</small>
+                        <strong>{{ school.contact }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Teaching Methodology</small>
+                        <strong>{{ school.methodology }}</strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <small>Recommendations</small>
+                        <strong>{{ recommendation_count }}</strong>
+                    </div>
+
+                    <div class="detail-item full">
+                        <small>Facilities</small>
+                        <strong>{{ school.facilities }}</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 ADMISSIONS
+                 ================================= -->
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        📋
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Admission Applications
+                        </h2>
+
+                        <p>
+                            All admission applications received by
+                            this school.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if admissions %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Child</th>
+                                    <th>Parent</th>
+                                    <th>Status</th>
+                                    <th>Application Date</th>
+                                    <th>Interview Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for admission in admissions %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ admission.child_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ admission.parent_name }}
+                                        </td>
+
+                                        <td>
+                                            <span class="status-badge status-{{ admission.status|lower|replace(' ', '-') }}">
+                                                {{ admission.status }}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            {{ admission.application_date }}
+                                        </td>
+
+                                        <td>
+                                            {% if admission.interview_date %}
+                                                {{ admission.interview_date }}
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No admission applications for this school yet.
+                    </p>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

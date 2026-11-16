@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Admissions - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="parent-dashboard">
+
+    <aside class="parent-sidebar">
+        <div class="parent-logo"><a href="/">EduMentor</a><p>Parent Portal</p></div>
+        <nav class="parent-menu">
+            <a href="/parent/dashboard"><span>🏠</span> Dashboard</a>
+            <a href="/parent/child"><span>👧</span> Child Details</a>
+            <a href="/parent/assessment"><span>📝</span> Assessment</a>
+            <a href="/parent/results"><span>📊</span> Results</a>
+            <a href="/parent/observations"><span>👩‍🏫</span> Teacher Observations</a>
+            <a href="/parent/recommendations"><span>🏫</span> School Recommendations</a>
+            <a href="/parent/admissions" class="active"><span>📋</span> Admissions</a>
+            <a href="/parent/profile"><span>👤</span> My Profile</a>
+        </nav>
+        <div class="parent-logout"><a href="/login"><span>🚪</span> Logout</a></div>
+    </aside>
+
+    <main class="parent-main">
+        <header class="parent-topbar">
+            <div>
+                <p class="dashboard-label">MY ADMISSIONS</p>
+                <h1>Admission Applications</h1>
+            </div>
+            <div class="parent-user">
+                <div class="parent-avatar">&#128106;</div>
+                <div><strong>Parent</strong><small>{{ parent.name }}</small></div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if not child or not admissions %}
+<section class="recommendation-empty">
+    <div class="recommendation-empty-icon">📋</div>
+    <h2>No Admission Applications</h2>
+    <p>{% if not child %}Add your child's details first to apply for admissions.{% else %}You haven't applied to any schools yet. Check your recommended schools to get started.{% endif %}</p>
+    {% if not child %}
+        <a href="/parent/child" class="recommendation-start-btn">Add Child Details</a>
+    {% else %}
+        <a href="/parent/recommendations" class="recommendation-start-btn">View Recommendations</a>
+    {% endif %}
+</section>
+{% else %}
+<div class="child-info-card">
+    <div class="child-card-heading">
+        <div class="child-heading-icon">📋</div>
+        <div>
+            <h2>Your Applications</h2>
+            <p>Track and manage all admission applications.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>School</th>
+                    <th>Location</th>
+                    <th>Syllabus</th>
+                    <th>Status</th>
+                    <th>Applied On</th>
+                    <th>Interview</th>
+                    <th>Fee</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in admissions %}
+                    <tr>
+                        <td>{{ a.school_name }}</td>
+                        <td>{{ a.location }}</td>
+                        <td>{{ a.syllabus }}</td>
+                        <td><span class="status-badge status-{{ a.status.split()|join('-')|lower }}">{{ a.status }}</span></td>
+                        <td>{{ a.application_date or '—' }}</td>
+                        <td>{{ a.interview_date or '—' }}</td>
+                        <td>{{ a.fee or '—' }}</td>
+                        <td>
+                            <a href="/parent/admission/{{ a.school_id }}" class="child-save-btn" style="font-size:12px;padding:6px 14px;">Manage</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+        <footer class="parent-footer"><p>&copy; 2026 EduMentor | Personalized School Recommendation System</p></footer>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><a href="/">EduMentor</a></div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#about">About</a>
+            <a href="/#features">Features</a>
+            <a href="/#contact">Contact</a>
+            <a href="/login" class="login-nav-btn">Login</a>
+        </div>
+    </nav>
+
+    <section class="register-section">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="register-card">
+            <h1>Register Here</h1>
+            <p class="register-subtitle">Create your EduMentor account</p>
+
+            <form action="/register" method="POST">
+
+                <div class="form-group">
+                    <label for="role">Account Type</label>
+                    <select id="role" name="role" required>
+                        <option value="parent" {% if role == 'parent' %}selected{% endif %}>Parent</option>
+                        <option value="teacher" {% if role == 'teacher' %}selected{% endif %}>Teacher</option>
+                        <option value="school" {% if role == 'school' %}selected{% endif %}>School</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" placeholder="Enter your full name"
+                        value="{{ form.full_name if form else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username"
+                        value="{{ form.username if form else '' }}" required>
+                    <div class="validation-hint" id="username-valid"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address"
+                        value="{{ form.email if form else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Mobile Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter your mobile number"
+                        maxlength="10" pattern="[0-9]{10}"
+                        title="Please enter a valid 10-digit mobile number"
+                        value="{{ form.phone if form else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City / Area</label>
+                    <input type="text" id="city" name="city" placeholder="Enter your city / area"
+                        value="{{ form.city if form else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password"
+                        minlength="6" required>
+                    <div class="validation-hint" id="password-strength"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password"
+                        placeholder="Confirm your password" minlength="6" required>
+                    <div class="password-hint" id="password-hint">Passwords do not match.</div>
+                </div>
+
+                <button type="submit" class="register-submit">Create Account</button>
+            </form>
+
+            <div class="login-option">
+                <p>Already have an account? <a href="/login">Login here</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+    </footer>
+
+    <script>
+        const fullNameInput = document.getElementById("full_name");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const confirmInput = document.getElementById("confirm_password");
+        const hint = document.getElementById("password-hint");
+        const usernameValid = document.getElementById("username-valid");
+        const passwordStrength = document.getElementById("password-strength");
+
+        function validateUsername() {
+            const value = usernameInput.value.trim();
+            if (value === "") {
+                usernameValid.textContent = "Username is required.";
+                usernameValid.className = "validation-hint error";
+                return false;
+            }
+            if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+                usernameValid.textContent =
+                    "Username can only contain letters, numbers and underscores.";
+                usernameValid.className = "validation-hint error";
+                return false;
+            }
+            usernameValid.textContent = "";
+            usernameValid.className = "validation-hint";
+            return true;
+        }
+
+        function assessPasswordStrength() {
+            const value = passwordInput.value;
+            if (value === "") {
+                passwordStrength.textContent = "";
+                passwordStrength.className = "validation-hint";
+                return;
+            }
+            let score = 0;
+            if (value.length >= 6) score += 1;
+            if (value.length >= 10) score += 1;
+            if (/[A-Z]/.test(value)) score += 1;
+            if (/[a-z]/.test(value)) score += 1;
+            if (/[0-9]/.test(value)) score += 1;
+            if (/[^A-Za-z0-9]/.test(value)) score += 1;
+
+            if (score <= 2) {
+                passwordStrength.textContent = "Weak - use a mix of letters, numbers and symbols.";
+                passwordStrength.className = "validation-hint error";
+            } else if (score <= 4) {
+                passwordStrength.textContent = "Medium - try adding uppercase, numbers or symbols.";
+                passwordStrength.className = "validation-hint warning";
+            } else {
+                passwordStrength.textContent = "Strong password.";
+                passwordStrength.className = "validation-hint success";
+            }
+        }
+
+        function checkMatch() {
+            if (confirmInput.value === "") {
+                hint.style.display = "none";
+                return;
+            }
+            hint.style.display = (passwordInput.value === confirmInput.value) ? "none" : "block";
+        }
+
+        usernameInput.addEventListener("input", validateUsername);
+        passwordInput.addEventListener("input", function () {
+            assessPasswordStrength();
+            checkMatch();
+        });
+        confirmInput.addEventListener("input", checkMatch);
+
+        document.querySelector(".register-card form").addEventListener("submit", function (event) {
+            if (!validateUsername()) {
+                event.preventDefault();
+            }
+            if (passwordInput.value !== confirmInput.value) {
+                hint.style.display = "block";
+                event.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

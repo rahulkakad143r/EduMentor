@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Assign Teacher - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         ASSIGN TEACHER
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign"
+                   class="active">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        ASSIGN TEACHERS
+                    </p>
+
+                    <h1>
+                        Assign Teachers to Children
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 ASSIGN FORM
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        🔗
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Assign a Teacher
+                        </h2>
+
+                        <p>
+                            Choose a teacher and a child to create
+                            a new assignment.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form action="/admin/assign"
+                      method="POST"
+                      class="child-form">
+
+
+                    <!-- Child -->
+
+                    <div class="child-form-group">
+
+                        <label for="child_id">
+                            Select Child
+                        </label>
+
+                        <select
+                            id="child_id"
+                            name="child_id"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select Child --
+                            </option>
+
+                            {% for child in children %}
+
+                                <option value="{{ child.id }}">
+                                    {{ child.child_name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Teacher -->
+
+                    <div class="child-form-group">
+
+                        <label for="teacher_id">
+                            Select Teacher
+                        </label>
+
+                        <select
+                            id="teacher_id"
+                            name="teacher_id"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select Teacher --
+                            </option>
+
+                            {% for teacher in teachers %}
+
+                                <option value="{{ teacher.id }}">
+                                    {{ teacher.name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Submit -->
+
+                    <div class="child-form-buttons">
+
+                        <button
+                            type="submit"
+                            class="child-save-btn"
+                        >
+
+                            Assign Teacher
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================
+                 CURRENT ASSIGNMENTS
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        📋
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Current Assignments
+                        </h2>
+
+                        <p>
+                            View and manage all teacher-child assignments.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if assignments %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Teacher</th>
+                                    <th>Child</th>
+                                    <th>Action</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for assignment in assignments %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ assignment.teacher_name }}
+                                        </td>
+
+                                        <td>
+                                            {{ assignment.child_name }}
+                                        </td>
+
+                                        <td>
+
+                                            <form action="/admin/assign/delete"
+                                                  method="POST">
+
+                                                <input
+                                                    type="hidden"
+                                                    name="assignment_id"
+                                                    value="{{ assignment.id }}"
+                                                >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn-delete"
+                                                >
+                                                    Remove
+                                                </button>
+
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No assignments created yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>

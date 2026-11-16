@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Child Assessment - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="/parent/child">
+                    <span>👧</span>
+                    Child Details
+                </a>
+
+                <a href="/parent/assessment"
+                   class="active">
+                    <span>📝</span>
+                    Assessment
+                </a>
+
+                <a href="/parent/results">
+                    <span>📊</span>
+                    Results
+                </a>
+
+                <a href="/parent/certificate">
+                    <span>🏅</span>
+                    Certificate
+                </a>
+
+                <a href="/parent/observations">
+                    <span>👩‍🏫</span>
+                    Teacher Observations
+                </a>
+
+                <a href="/parent/recommendations">
+                    <span>🏫</span>
+                    School Recommendations
+                </a>
+
+                <a href="/parent/admissions">
+                    <span>📋</span>
+                    Admissions
+                </a>
+
+                <a href="/parent/profile">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="parent-logout">
+
+                <a href="/login">
+                    <span>🚪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        CHILD ASSESSMENT
+                    </p>
+
+                    <h1>
+                        School Readiness Assessment 🧠
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            EduMentor User
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================
+                 INTRODUCTION
+                 ================================= -->
+
+            <section class="assessment-intro">
+
+                <div class="assessment-intro-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <span>
+                        LET'S BEGIN
+                    </span>
+
+                    <h2>
+                        Understand Your Child's Skills
+                    </h2>
+
+                    <p>
+                        This assessment helps evaluate important
+                        school-readiness skills through simple,
+                        child-friendly activities.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 INSTRUCTIONS
+                 ================================= -->
+
+            <section class="assessment-instructions">
+
+                <h2>
+                    Before You Start
+                </h2>
+
+                <div class="instruction-container">
+
+                    <div class="instruction-card">
+
+                        <div>
+                            👨‍👩‍👧
+                        </div>
+
+                        <h3>
+                            Parent Support
+                        </h3>
+
+                        <p>
+                            Stay with your child and provide
+                            encouragement during the assessment.
+                        </p>
+
+                    </div>
+
+
+                    <div class="instruction-card">
+
+                        <div>
+                            😊
+                        </div>
+
+                        <h3>
+                            Keep It Comfortable
+                        </h3>
+
+                        <p>
+                            Let your child answer naturally
+                            without pressure.
+                        </p>
+
+                    </div>
+
+
+                    <div class="instruction-card">
+
+                        <div>
+                            ⏱️
+                        </div>
+
+                    <h3>
+                        Time Limit (10 Minutes)
+                    </h3>
+
+                    <p>
+                        The assessment is timed and will
+                        automatically submit when the time limit
+                        is exhausted.
+                    </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 SKILL AREAS
+                 ================================= -->
+
+            <section class="assessment-skills">
+
+                <div class="assessment-section-heading">
+
+                    <span>
+                        ASSESSMENT AREAS
+                    </span>
+
+                    <h2>
+                        Skills We Will Explore
+                    </h2>
+
+                    <p>
+                        The assessment focuses on the following
+                        school-readiness areas.
+                    </p>
+
+                </div>
+
+
+                <div class="skill-grid">
+
+
+                    <!-- Language -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            🔤
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Language
+                            </h3>
+
+                            <p>
+                                Basic language understanding
+                                and expression.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            01
+                        </span>
+
+                    </div>
+
+
+                    <!-- Numbers -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            🔢
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Numbers
+                            </h3>
+
+                            <p>
+                                Basic number recognition
+                                and understanding.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            02
+                        </span>
+
+                    </div>
+
+
+                    <!-- Colors and Shapes -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            🎨
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Colors & Shapes
+                            </h3>
+
+                            <p>
+                                Recognition of common colors
+                                and shapes.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            03
+                        </span>
+
+                    </div>
+
+
+                    <!-- Memory -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            🧠
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Memory
+                            </h3>
+
+                            <p>
+                                Simple memory and recall
+                                activities.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            04
+                        </span>
+
+                    </div>
+
+
+                    <!-- Logical Thinking -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            🧩
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Logical Thinking
+                            </h3>
+
+                            <p>
+                                Simple reasoning and
+                                pattern-based activities.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            05
+                        </span>
+
+                    </div>
+
+
+                    <!-- Listening -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            👂
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Listening
+                            </h3>
+
+                            <p>
+                                Listening and understanding
+                                simple instructions.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            06
+                        </span>
+
+                    </div>
+
+
+                    <!-- Communication -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            💬
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Communication
+                            </h3>
+
+                            <p>
+                                Basic communication and
+                                expression skills.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            07
+                        </span>
+
+                    </div>
+
+
+                    <!-- Problem Solving -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-icon">
+                            💡
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Problem Solving
+                            </h3>
+
+                            <p>
+                                Simple activities involving
+                                basic problem solving.
+                            </p>
+
+                        </div>
+
+                        <span>
+                            08
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 START ASSESSMENT
+                 ================================= -->
+
+            <section class="start-assessment">
+
+                <div>
+
+                    <h2>
+                        Ready to Begin?
+                    </h2>
+
+                    <p>
+                        Make sure your child is comfortable,
+                        then start the 10-minute timed
+                        school-readiness assessment.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="/parent/assessment/questions"
+                    class="start-assessment-btn"
+                >
+                    Start Assessment
+                </a>
+
+            </section>
+
+
+            <!-- =================================
+                 DISCLAIMER
+                 ================================= -->
+
+            <div class="assessment-disclaimer">
+
+                <strong>
+                    ℹ️ Important
+                </strong>
+
+                <p>
+                    This assessment is intended to understand
+                    school-readiness skills and support school
+                    recommendations. It is not an IQ test,
+                    psychological diagnosis, or medical assessment.
+                </p>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =================================
+         JAVASCRIPT
+         ================================= -->
+
+    <script>
+
+        // Assessment questions load at /parent/assessment/questions
+
+    </script>
+
+</body>
+
+</html>

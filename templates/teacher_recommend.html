@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommend Schools - EduMentor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+                <a href="/">EduMentor</a>
+                <p>Teacher Portal</p>
+            </div>
+
+            <nav class="parent-menu">
+                <a href="/teacher/dashboard">
+                    <span>&#127968;</span> Dashboard
+                </a>
+                <a href="/teacher/children">
+                    <span>&#128103;</span> Assigned Children
+                </a>
+                <a href="/teacher/observation">
+                    <span>&#128221;</span> Record Observation
+                </a>
+                <a href="/teacher/observations">
+                    <span>&#128203;</span> My Observations
+                </a>
+                <a href="/teacher/recommend" class="active">
+                    <span>&#127979;</span> Recommend Schools
+                </a>
+                <a href="/teacher/recommendations">
+                    <span>&#9989;</span> My Recommendations
+                </a>
+            </nav>
+
+            <div class="parent-logout">
+                <a href="/logout">
+                    <span>&#128682;</span> Logout
+                </a>
+            </div>
+
+        </aside>
+
+        <main class="parent-main">
+
+            <header class="parent-topbar">
+                <div>
+                    <p class="dashboard-label">RECOMMEND SCHOOLS</p>
+                    <h1>Recommend Schools to a Child</h1>
+                </div>
+                <div class="parent-user">
+                    <div class="parent-avatar">&#128105;&#8205;&#127979;</div>
+                    <div>
+                        <strong>Teacher</strong>
+                        <small>{{ teacher.name }}</small>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for cat, msg in messages %}
+                            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section class="child-info-card">
+
+                <div class="child-card-heading">
+                    <div class="child-heading-icon">&#127979;</div>
+                    <div>
+                        <h2>Recommendation</h2>
+                        <p>Choose a child and select the schools you recommend. These will be shown to the parent.</p>
+                    </div>
+                </div>
+
+                {% if not children %}
+                    <div class="child-note">
+                        <span>&#128161;</span>
+                        <div>
+                            <strong>No Assigned Children</strong>
+                            <p>Assign a child first from the Assigned Children page to recommend schools.</p>
+                        </div>
+                    </div>
+                {% else %}
+
+                    <form method="GET" action="/teacher/recommend" class="child-form" id="filter-form">
+
+                        <div class="child-form-group">
+                            <label for="child_id">Select Child</label>
+                            <select id="child_id" name="child_id"
+                                    onchange="window.__skipSelection = true; this.form.submit();">
+                                <option value="">-- Select a Child --</option>
+                                {% for child in children %}
+                                    <option value="{{ child.id }}" {% if selected_child_id == child.id %}selected{% endif %}>
+                                        {{ child.child_name }} ({{ child.current_class | upper }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="child-form-group">
+                            <label for="q">Search School</label>
+                            <input type="text" id="q" name="q" value="{{ q }}"
+                                placeholder="Search by name, location, syllabus or class..."
+                            >
+                        </div>
+
+                        <div class="child-form-buttons">
+                            <button type="submit" name="clear" id="clear-btn" class="child-cancel-btn">Clear</button>
+                            <button type="submit" class="child-save-btn">Search &#128269;</button>
+                        </div>
+
+                    </form>
+
+
+                    <form action="/teacher/recommend" method="POST" class="child-form" id="recommend-form">
+
+                        <input type="hidden" name="child_id" value="{{ selected_child_id }}">
+
+                        <div class="child-form-group full-width">
+                            <label>Select Recommended Schools</label>
+                            <div class="child-note" style="margin:0 0 12px;">
+                                <span>&#128279;</span>
+                                <div>
+                                    <strong>Tip</strong>
+                                    <p>
+                                        Select one or more schools that best fit this child.
+                                        Your selections are kept while you browse pages or search.
+                                        Previously recommended schools are pre-checked.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p style="margin:0 0 10px;color:#777;font-size:13px;">
+                                Showing {{ schools|length }} of {{ total }} schools
+                                &nbsp;|&nbsp; Page {{ page }} of {{ total_pages }}
+                                &nbsp;|&nbsp; <strong style="color:#6c5ce7;">{{ selected_schools|length }} selected</strong>
+                            </p>
+
+                            {% if schools %}
+                                <div style="border:1px solid #eee;border-radius:12px;padding:8px;">
+                                    {% for school in schools %}
+                                        <label style="display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-bottom:1px solid #f3f3f3;cursor:pointer;">
+                                            <input type="checkbox" name="school_ids" value="{{ school.id }}"
+                                                   {% if school.id in selected_schools %}checked{% endif %}>
+                                            <div>
+                                                <strong>{{ school.name }}</strong>
+                                                <div style="color:#777;font-size:13px;">
+                                                    📍 {{ school.location }} &bull; {{ school.syllabus }} &bull;
+                                                    {{ school.classes }} &bull; 💰 {{ school.fees }}
+                                                </div>
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                {% if total_pages > 1 %}
+                                    <div style="display:flex;justify-content:center;gap:6px;margin-top:16px;flex-wrap:wrap;">
+                                        {% set base = "/teacher/recommend?child_id=" ~ selected_child_id %}
+                                        {% if page > 1 %}
+                                            <a class="page-link" href="{{ base }}&page={{ page - 1 }}{% if q %}&q={{ q | urlencode }}{% endif %}"
+                                               style="padding:8px 12px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#6c5ce7;">&laquo; Prev</a>
+                                        {% endif %}
+                                        {% for p in range(1, total_pages + 1) %}
+                                            <a class="page-link" href="{{ base }}&page={{ p }}{% if q %}&q={{ q | urlencode }}{% endif %}"
+                                               style="{% if p == page %}padding:8px 14px;border-radius:8px;background:#6c5ce7;color:#fff;font-weight:600;{% else %}padding:8px 14px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#6c5ce7;{% endif %}">{{ p }}</a>
+                                        {% endfor %}
+                                        {% if page < total_pages %}
+                                            <a class="page-link" href="{{ base }}&page={{ page + 1 }}{% if q %}&q={{ q | urlencode }}{% endif %}"
+                                               style="padding:8px 12px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#6c5ce7;">Next &raquo;</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="child-note">
+                                    <span>&#128161;</span>
+                                    <div>
+                                        <strong>No Schools Found</strong>
+                                        <p>Try a different search term.</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="child-form-group full-width">
+                            <label for="note">Note (optional)</label>
+                            <textarea id="note" name="note" rows="3"
+                                placeholder="Add a short note for the parent explaining your recommendation"
+                            ></textarea>
+                        </div>
+
+                        <div class="child-form-buttons">
+                            <a href="/teacher/dashboard" class="child-cancel-btn">Cancel</a>
+                            <button type="submit" class="child-save-btn">Save Recommendation &rarr;</button>
+                        </div>
+
+                    </form>
+
+                {% endif %}
+
+            </section>
+
+            <footer class="parent-footer">
+                <p>&copy; 2026 EduMentor | Personalized School Recommendation System</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+
+<script>
+(function () {
+    var recommendForm = document.getElementById('recommend-form');
+    if (!recommendForm) return;
+
+    var selected = new Set();
+    recommendForm.querySelectorAll('input[name="school_ids"]').forEach(function (cb) {
+        if (cb.checked) selected.add(cb.value);
+    });
+    recommendForm.addEventListener('change', function (e) {
+        if (e.target && e.target.name === 'school_ids') {
+            if (e.target.checked) selected.add(e.target.value);
+            else selected.delete(e.target.value);
+        }
+    });
+
+    function selectionParams() {
+        return Array.from(selected)
+            .map(function (v) { return 'school_ids=' + encodeURIComponent(v); })
+            .join('&');
+    }
+
+    recommendForm.addEventListener('submit', function (e) {
+        var form = e.target;
+        form.querySelectorAll('input[name="school_ids"]').forEach(function (inp) {
+            inp.remove();
+        });
+        selected.forEach(function (value) {
+            var hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'school_ids';
+            hidden.value = value;
+            form.appendChild(hidden);
+        });
+    });
+
+    document.querySelectorAll('a.page-link').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            var url = link.getAttribute('href');
+            var sp = selectionParams();
+            if (sp) url += (url.indexOf('?') === -1 ? '?' : '&') + sp;
+            window.location.href = url;
+        });
+    });
+
+    var filterForm = document.getElementById('filter-form');
+    if (filterForm) {
+        var clearBtn = document.getElementById('clear-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function () {
+                filterForm.querySelector('input[name="q"]').value = '';
+            });
+        }
+        filterForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var shouldPreserve = !(window.__skipSelection === true);
+            window.__skipSelection = false;
+            var q = (filterForm.querySelector('input[name="q"]').value || '').trim();
+            var childId = filterForm.querySelector('select[name="child_id"]').value;
+            var url = '/teacher/recommend?child_id=' + encodeURIComponent(childId);
+            if (q) url += '&q=' + encodeURIComponent(q);
+            url += '&page=1';
+            if (shouldPreserve) {
+                var sp = selectionParams();
+                if (sp) url += '&' + sp;
+            }
+            window.location.href = url;
+        });
+    }
+})();
+</script>
+
+</html>

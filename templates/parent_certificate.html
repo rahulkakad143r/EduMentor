@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Certificate - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@600&display=swap"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Parent Portal
+                </p>
+
+            </div>
+
+
+            <nav class="parent-menu">
+
+                <a href="/parent/dashboard">
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="/parent/child">
+                    <span>👧</span>
+                    Child Details
+                </a>
+
+                <a href="/parent/assessment">
+                    <span>📝</span>
+                    Assessment
+                </a>
+
+                <a href="/parent/results">
+                    <span>📊</span>
+                    Results
+                </a>
+
+                <a href="/parent/certificate"
+                   class="active">
+                    <span>🏅</span>
+                    Certificate
+                </a>
+
+                <a href="/parent/observations">
+                    <span>👩‍🏫</span>
+                    Teacher Observations
+                </a>
+
+                <a href="/parent/recommendations">
+                    <span>🏫</span>
+                    School Recommendations
+                </a>
+
+                <a href="/parent/admissions">
+                    <span>📋</span>
+                    Admissions
+                </a>
+
+                <a href="/parent/profile">
+                    <span>👤</span>
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="parent-logout">
+
+                <a href="/login">
+                    <span>🚪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        CERTIFICATE
+                    </p>
+
+                    <h1>
+                        Assessment Certificate 🏅
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128106;</div>
+
+                    <div>
+
+                        <strong>
+                            Parent
+                        </strong>
+
+                        <small>
+                            EduMentor User
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 ACTIONS
+                 ================================= -->
+
+            <div class="certificate-actions">
+
+                <p>
+                    Congratulations! Your child has completed
+                    the school-readiness assessment.
+                </p>
+
+                <button type="button"
+                        class="primary-btn"
+                        onclick="window.print()">
+                    🖨️ Print / Save as PDF
+                </button>
+
+            </div>
+
+
+            <!-- =================================
+                 CERTIFICATE
+                 ================================= -->
+
+            <section class="certificate-wrap">
+
+                <div class="certificate"
+                     id="certificate">
+
+                    <div class="certificate-border">
+
+                        <p class="certificate-brand">
+                            EduMentor
+                        </p>
+
+                        <p class="certificate-sub">
+                            Personalized School Recommendation System
+                        </p>
+
+                        <h2 class="certificate-title">
+                            Certificate of Completion
+                        </h2>
+
+                        <p class="certificate-awarded">
+                            This certificate is proudly presented to
+                        </p>
+
+                        <h1 class="certificate-name">
+                            {{ child.child_name }}
+                        </h1>
+
+                        <p class="certificate-text">
+                            for successfully completing the
+                            EduMentor School-Readiness Assessment
+                            {% if child.current_class %}
+                                ({{ child.current_class | upper }})
+                            {% endif %}
+                            with an overall readiness score of
+                            <strong>{{ assessment.overall_score }}%</strong>
+                            ({{ marks }} of {{ total_questions }} marks).
+                        </p>
+
+
+                        <div class="certificate-meta">
+
+                            <div>
+
+                                <span>
+                                    ISSUED ON
+                                </span>
+
+                                <strong>
+                                    {{ certificate.issued_at[:10] if certificate.issued_at else assessment.completed_at[:10] }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="certificate-seal">
+                                🏅
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    CERTIFICATE ID
+                                </span>
+
+                                <strong>
+                                    {{ certificate.certificate_code }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="certificate-signs">
+
+                            <div class="certificate-sign">
+
+                                <span class="certificate-signature">
+                                    Shivanjali Mattikalli
+                                </span>
+
+                                <span class="certificate-line"></span>
+
+                                <p>
+                                    EduMentor Assessor
+                                </p>
+
+                            </div>
+
+
+                            <div class="certificate-sign">
+
+                                <span class="certificate-signature">
+                                    Sneha Kadam
+                                </span>
+
+                                <span class="certificate-line"></span>
+
+                                <p>
+                                    Program Director
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

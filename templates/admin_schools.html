@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>All Schools - EduMentor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- =================================
+         ALL SCHOOLS
+         ================================= -->
+
+    <div class="parent-dashboard">
+
+
+        <!-- =================================
+             SIDEBAR
+             ================================= -->
+
+        <aside class="parent-sidebar">
+
+            <!-- Logo -->
+
+            <div class="parent-logo">
+
+                <a href="/">
+                    EduMentor
+                </a>
+
+                <p>
+                    Admin Portal
+                </p>
+
+            </div>
+
+
+            <!-- Menu -->
+
+            <nav class="parent-menu">
+
+                <a href="/admin/dashboard">
+
+                    <span>🏠</span>
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/children">
+
+                    <span>👧</span>
+                    Children
+
+                </a>
+
+
+                <a href="/admin/parents">
+
+                    <span>👨‍👩‍👧</span>
+                    Parents
+
+                </a>
+
+
+                <a href="/admin/teachers">
+
+                    <span>👨‍🏫</span>
+                    Teachers
+
+                </a>
+
+
+                <a href="/admin/schools"
+                   class="active">
+
+                    <span>🏫</span>
+                    Schools
+
+                </a>
+
+
+                <a href="/admin/assessments">
+
+                    <span>📊</span>
+                    Assessments
+
+                </a>
+
+
+                <a href="/admin/assign">
+
+                    <span>🔗</span>
+                    Assign Teacher
+
+                </a>
+
+            </nav>
+
+
+            <!-- Logout -->
+
+            <div class="parent-logout">
+
+                <a href="/logout">
+
+                    <span>🚪</span>
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================
+             MAIN CONTENT
+             ================================= -->
+
+        <main class="parent-main">
+
+
+            <!-- Top Bar -->
+
+            <header class="parent-topbar">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        MANAGE SCHOOLS
+                    </p>
+
+                    <h1>
+                        All Schools
+                    </h1>
+
+                </div>
+
+
+                <div class="parent-user">
+
+                    <div class="parent-avatar">&#128737;&#65039;</div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            {{ admin.name }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- =================================
+                 ADD SCHOOL FORM
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        ➕
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Add New School
+                        </h2>
+
+                        <p>
+                            Create a school account directly from
+                            the admin panel.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form action="/admin/schools"
+                      method="POST"
+                      class="child-form">
+
+
+                    <div class="child-form-group">
+
+                        <label for="name">
+                            School Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter school name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="location">
+                            Location
+                        </label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            placeholder="Enter city / area"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="syllabus">
+                            Syllabus
+                        </label>
+
+                        <input
+                            type="text"
+                            id="syllabus"
+                            name="syllabus"
+                            placeholder="e.g. CBSE"
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Choose a username"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter email address"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="phone">
+                            Mobile Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="10-digit mobile number"
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="confirm_password">
+                            Confirm Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Re-enter password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-buttons">
+
+                        <button
+                            type="submit"
+                            class="child-save-btn"
+                        >
+
+                            Add School
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================
+                 RESET SCHOOL LOGIN
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        🔑
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Reset School Login
+                        </h2>
+
+                        <p>
+                            Choose a school and set a new username,
+                            email and password.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form action="/admin/schools"
+                      method="POST"
+                      class="child-form">
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="reset">
+
+
+                    <div class="child-form-group">
+
+                        <label for="reset_school_id">
+                            School
+                        </label>
+
+                        <select
+                            id="reset_school_id"
+                            name="school_id"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select School --
+                            </option>
+
+                            {% for school in schools %}
+
+                                <option value="{{ school.id }}">
+                                    {{ school.name }} ({{ school.location }})
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="reset_username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="reset_username"
+                            name="username"
+                            placeholder="New login username"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="reset_email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="reset_email"
+                            name="email"
+                            placeholder="New login email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-group">
+
+                        <label for="reset_password">
+                            New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="reset_password"
+                            name="password"
+                            placeholder="New password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="child-form-buttons">
+
+                        <button
+                            type="submit"
+                            class="child-save-btn"
+                        >
+
+                            Reset Login
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================
+                 SCHOOLS TABLE
+                 ================================= -->
+
+            <div class="child-info-card">
+
+                <div class="child-card-heading">
+
+                    <div class="child-heading-icon">
+                        🏫
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Registered Schools
+                        </h2>
+
+                        <p>
+                            View all schools registered on EduMentor.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if schools %}
+
+                    <div class="table-responsive">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Syllabus</th>
+                                    <th>Classes</th>
+                                    <th>Fees</th>
+                                    <th>Rating</th>
+                                    <th>Contact</th>
+                                    <th>Username</th>
+                                    <th>Login Access</th>
+                                    <th>Actions</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for school in schools %}
+
+                                    <tr>
+
+                                        <td>
+                                            <a href="/admin/school/{{ school.id }}"
+                                               class="admin-detail-link">
+                                                {{ school.name }}
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            {{ school.location }}
+                                        </td>
+
+                                        <td>
+                                            {{ school.syllabus }}
+                                        </td>
+
+                                        <td>
+                                            {{ school.classes }}
+                                        </td>
+
+                                        <td>
+                                            {{ school.fees }}
+                                        </td>
+
+                                        <td>
+                                            {{ school.rating }}
+                                        </td>
+
+                                        <td>
+                                            {{ school.contact }}
+                                        </td>
+
+                                        <td>
+                                            {% if school.username %}
+                                                {{ school.username }}
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if school.username and school.password_hash %}
+                                                ✅
+                                            {% else %}
+                                                ❌
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <details class="admin-actions">
+                                                <summary
+                                                    class="admin-actions-toggle">
+                                                    🔑 Reset Login
+                                                </summary>
+
+                                                <form action="/admin/schools"
+                                                      method="POST"
+                                                      class="admin-actions-form">
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="action"
+                                                        value="reset">
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="school_id"
+                                                        value="{{ school.id }}">
+
+                                                    <label for="username-{{ school.id }}">
+                                                        Username
+                                                    </label>
+
+                                                    <input
+                                                        type="text"
+                                                        id="username-{{ school.id }}"
+                                                        name="username"
+                                                        value="{{ school.username }}"
+                                                        required
+                                                    >
+
+                                                    <label for="email-{{ school.id }}">
+                                                        Email
+                                                    </label>
+
+                                                    <input
+                                                        type="email"
+                                                        id="email-{{ school.id }}"
+                                                        name="email"
+                                                        value="{{ school.email }}"
+                                                        required
+                                                    >
+
+                                                    <label for="password-{{ school.id }}">
+                                                        New Password
+                                                    </label>
+
+                                                    <input
+                                                        type="password"
+                                                        id="password-{{ school.id }}"
+                                                        name="password"
+                                                        placeholder="New password"
+                                                        minlength="6"
+                                                        required
+                                                    >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="action-btn"
+                                                    >
+                                                        Save Credentials
+                                                    </button>
+
+                                                </form>
+
+                                            </details>
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="no-data">
+                        No schools registered yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="parent-footer">
+
+                <p>
+                    © 2026 EduMentor |
+                    Personalized School Recommendation System
+                </p>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>
